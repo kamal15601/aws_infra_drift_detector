@@ -1,161 +1,230 @@
-# InfraSnap Static Web App - Deployment Package
+# 🚀 Python File Upload for Azure App Service
 
-## 🚀 Quick Start
+A production-ready Python Flask application for uploading files to Azure App Service with two storage options:
 
-This package contains a complete, production-ready static web application for infrastructure monitoring. You can deploy it to Azure in just a few minutes!
+1. **Local Storage** - Simple but files may be lost during restarts
+2. **Azure Blob Storage** - Production-ready with persistent storage
 
-### What's Included
-
-- **Complete Static Web App**: Modern, responsive infrastructure monitoring interface
-- **All Source Code**: HTML, CSS, JavaScript - ready to deploy
-- **Deployment Guides**: Step-by-step instructions for multiple deployment methods
-- **Azure Integration**: Pre-configured for Azure Static Web Apps
-
-### Features
-
-✅ **Real-time Dashboard** - Live infrastructure monitoring  
-✅ **Report Generation** - Download infrastructure reports  
-✅ **Responsive Design** - Works on desktop and mobile  
-✅ **Modern UI/UX** - Professional, corporate-ready interface  
-✅ **Interactive Elements** - Smooth animations and transitions  
-✅ **No Dependencies** - Pure HTML, CSS, JavaScript  
-
-## 📁 Package Structure
+## 📁 Project Structure
 
 ```
-deployment-package/
-├── src/                    # 👈 Deploy these files to Azure
-│   ├── index.html         # Main application
-│   ├── styles.css         # All styling
-│   └── app.js             # Application logic
-├── docs/
-│   ├── DEPLOYMENT.md      # Comprehensive deployment guide
-│   └── AZURE-SETUP.md     # Step-by-step Azure portal guide
-└── README.md              # This file
+staticapp/
+├── app.py                  # Flask app with local storage
+├── app_blob.py            # Flask app with Azure Blob Storage
+├── main.py                # Production entry point
+├── start.py               # Development startup script
+├── requirements.txt       # Python dependencies
+├── templates/
+│   ├── index.html         # Upload form (local storage)
+│   ├── files.html         # File list (local storage)
+│   ├── index_blob.html    # Upload form (blob storage)
+│   └── files_blob.html    # File list (blob storage)
+└── uploads/               # Local upload directory
 ```
 
-## 🎯 Deploy in 3 Steps
+## 🔧 Local Development Setup
 
-### Step 1: Choose Your Method
+### 1. Install Dependencies
 
-1. **🌟 Azure Portal (Easiest)** - No technical skills required
-2. **💻 GitHub Integration** - Automatic deployments
-3. **⚡ Azure CLI** - For developers
+```powershell
+# Install Python packages
+pip install -r requirements.txt
+```
 
-### Step 2: Follow the Guide
+### 2. Run the Application
 
-- **New to Azure?** → Read `docs/AZURE-SETUP.md`
-- **Need all options?** → Read `docs/DEPLOYMENT.md`
+```powershell
+# Option 1: Use the startup script (recommended)
+python start.py
 
-### Step 3: Upload Files
+# Option 2: Run directly
+python app.py              # For local storage
+python app_blob.py         # For Azure Blob Storage
+```
 
-Upload everything from the `src/` folder to your Azure Static Web App.
+### 3. Access the Application
 
-## 🌐 Live Demo Preview
+Open your browser and go to: `http://localhost:5000`
 
-Once deployed, your app will have:
+## ☁️ Azure App Service Deployment
 
-- **Homepage**: Hero section with call-to-action buttons
-- **Dashboard**: Real-time infrastructure statistics
-- **Features**: Key capabilities showcase  
-- **Reports**: Downloadable infrastructure reports
-- **Mobile Support**: Responsive across all devices
+### Option 1: Local Storage (Simple)
 
-## 💡 Quick Deployment Options
+**Pros:**
+- ✅ No additional Azure services needed
+- ✅ Zero configuration
+- ✅ Works immediately
 
-### Option A: Azure Portal (Recommended for Beginners)
+**Cons:**
+- ❌ Files lost during app restarts/deployments
+- ❌ Limited storage space
+- ❌ No backup/redundancy
 
-1. Go to [portal.azure.com](https://portal.azure.com)
-2. Create "Static Web Apps" resource
-3. Upload files from `src/` folder
-4. Get your live URL instantly!
+**Deployment Steps:**
+1. Deploy your code to Azure App Service
+2. Set startup command: `gunicorn --bind 0.0.0.0:$PORT app:app`
+3. Ready to use!
 
-**Detailed Guide**: `docs/AZURE-SETUP.md`
+### Option 2: Azure Blob Storage (Recommended)
 
-### Option B: GitHub Integration
+**Pros:**
+- ✅ Files persist through restarts
+- ✅ Unlimited scalable storage
+- ✅ Built-in backup and redundancy
+- ✅ Enterprise security
 
-1. Upload `src/` folder to GitHub repository
-2. Connect Azure Static Web Apps to your repository
-3. Automatic deployments on every commit
+**Cons:**
+- ⚠️ Requires additional Azure setup
 
-### Option C: Azure CLI
+**Setup Steps:**
 
+#### 1. Create Azure Storage Account
 ```bash
-# Install CLI
-npm install -g @azure/static-web-apps-cli
-
-# Deploy
-swa deploy ./src --deployment-token YOUR_TOKEN
+# Using Azure CLI
+az storage account create \
+    --name yourstorageaccount \
+    --resource-group your-resource-group \
+    --location eastus \
+    --sku Standard_LRS
 ```
 
-## 🔧 Customization
+#### 2. Create Storage Container
+```bash
+az storage container create \
+    --name uploads \
+    --account-name yourstorageaccount
+```
 
-The application is built with vanilla technologies for easy customization:
+#### 3. Enable Managed Identity
+```bash
+# Enable system-assigned managed identity for your App Service
+az webapp identity assign \
+    --name your-app-name \
+    --resource-group your-resource-group
+```
 
-- **Colors**: Modify CSS variables in `styles.css`
-- **Content**: Update text and data in `index.html` and `app.js`
-- **Features**: Add new sections or functionality
-- **Branding**: Replace logos and update styling
+#### 4. Grant Storage Permissions
+```bash
+# Get the principal ID of your App Service
+PRINCIPAL_ID=$(az webapp identity show \
+    --name your-app-name \
+    --resource-group your-resource-group \
+    --query principalId -o tsv)
 
-## 📊 What You Get
+# Grant Storage Blob Data Contributor role
+az role assignment create \
+    --assignee $PRINCIPAL_ID \
+    --role "Storage Blob Data Contributor" \
+    --scope "/subscriptions/YOUR_SUBSCRIPTION_ID/resourceGroups/your-resource-group/providers/Microsoft.Storage/storageAccounts/yourstorageaccount"
+```
 
-### Infrastructure Monitoring Interface
-- Resource count tracking
-- Drift detection alerts
-- Compliance scoring
-- Activity timeline
-- Report generation
+#### 5. Configure App Service Settings
+In Azure Portal → App Service → Configuration → Application Settings:
 
-### Professional Design
-- Corporate-ready appearance
-- Modern gradient backgrounds
-- Smooth animations
-- Mobile-first responsive design
-- Loading states and notifications
+```
+AZURE_STORAGE_ACCOUNT_NAME = yourstorageaccount
+AZURE_STORAGE_CONTAINER_NAME = uploads
+SECRET_KEY = your-secret-key-here
+```
 
-### Production Ready
-- Optimized performance
-- Cross-browser compatibility
-- SEO-friendly structure
-- Accessibility features
-- Error handling
+#### 6. Set Startup Command
+In Azure Portal → App Service → Configuration → General Settings:
 
-## 🛠️ Technical Details
+```
+Startup Command: gunicorn --bind 0.0.0.0:$PORT app_blob:app
+```
 
-- **No Build Process**: Pure HTML/CSS/JS
-- **No Dependencies**: No npm packages or frameworks
-- **CDN Assets**: Font Awesome icons from CDN
-- **Modern JavaScript**: ES6+ features used
-- **CSS Grid/Flexbox**: Modern layout techniques
-- **Responsive**: Mobile-first approach
+## 🔍 Testing the Deployment
 
-## 📞 Support
+### Health Check Endpoint
+Visit: `https://your-app.azurewebsites.net/health`
 
-### Documentation
-- `docs/DEPLOYMENT.md` - Complete deployment options
-- `docs/AZURE-SETUP.md` - Azure Portal step-by-step
+**Local Storage Response:**
+```json
+{
+    "status": "healthy",
+    "timestamp": "2025-08-08T10:30:00"
+}
+```
 
-### Troubleshooting
-- Check browser console for errors
-- Verify all files uploaded correctly
-- Test in different browsers
-- Clear browser cache if needed
+**Blob Storage Response:**
+```json
+{
+    "status": "healthy",
+    "timestamp": "2025-08-08T10:30:00",
+    "storage_status": "connected",
+    "storage_account": "yourstorageaccount",
+    "container": "uploads"
+}
+```
 
-## 🎉 Success Metrics
+## 📋 Supported File Types
 
-After deployment, you should have:
+- **Documents:** TXT, PDF, DOC, DOCX
+- **Images:** PNG, JPG, JPEG, GIF
+- **Maximum Size:** 16MB per file
 
-- [ ] Live URL accessible from anywhere
-- [ ] All features working (navigation, dashboard, reports)
-- [ ] Mobile responsive design
-- [ ] No JavaScript errors in console
-- [ ] Fast loading times
-- [ ] Professional appearance
+## 🔒 Security Features
 
-## 🚀 Go Live Now!
+- ✅ File type validation
+- ✅ Secure filename handling
+- ✅ Size limits enforced
+- ✅ Managed Identity authentication (Blob Storage)
+- ✅ HTTPS encryption in production
 
-Your complete InfraSnap application is ready for deployment. Choose your deployment method and follow the guides in the `docs/` folder.
+## 🚀 Features
 
-**Estimated deployment time**: 5-15 minutes
+- **Clean UI:** Modern, responsive web interface
+- **File Management:** Upload, view, and download files
+- **Error Handling:** Comprehensive error messages
+- **Logging:** Detailed application logs
+- **Health Monitoring:** Built-in health check endpoint
 
-Ready to deploy? Start with `docs/AZURE-SETUP.md` for the easiest path! 🎊
+## 🔧 Troubleshooting
+
+### Common Issues
+
+**1. Storage Account Connection Fails**
+- Verify Managed Identity is enabled
+- Check RBAC permissions
+- Ensure storage account name is correct
+
+**2. Files Not Uploading**
+- Check file size (max 16MB)
+- Verify file type is allowed
+- Check application logs
+
+**3. Downloads Not Working**
+- Verify blob exists in storage
+- Check network connectivity
+- Review error logs
+
+### Logs Location
+- **Local Development:** Console output
+- **Azure App Service:** Log Stream in Azure Portal
+
+## 📊 Monitoring
+
+Monitor your application using:
+- Azure Application Insights
+- Azure Monitor Logs
+- Built-in App Service metrics
+
+## 💡 Next Steps
+
+1. **Add User Authentication** - Integrate Azure AD
+2. **Implement File Sharing** - Add user-specific folders
+3. **Add Metadata Storage** - Use Azure SQL Database
+4. **Enable CDN** - Add Azure CDN for global access
+5. **Implement Virus Scanning** - Add Azure Defender
+
+## 🤝 Contributing
+
+Feel free to contribute improvements:
+1. Fork the repository
+2. Create a feature branch
+3. Submit a pull request
+
+## 📄 License
+
+This project is open source and available under the MIT License.

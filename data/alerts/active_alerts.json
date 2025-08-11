@@ -1,0 +1,1783 @@
+[
+  {
+    "alert_id": "alert_2025-08-09_20-58-40_i-1234567890abcdef0",
+    "timestamp": "2025-08-09T20:58:40.380838",
+    "severity": "HIGH",
+    "status": "NEW",
+    "resource": {
+      "type": "aws_instance",
+      "name": "web-server-prod",
+      "terraform_address": "aws_instance.web_server",
+      "aws_id": "i-1234567890abcdef0"
+    },
+    "drift_details": {
+      "drift_type": "configuration",
+      "differences": {
+        "instance_type": {
+          "terraform": "t3.medium",
+          "aws": "t3.large",
+          "impact": "Cost increase, performance change"
+        },
+        "tags": {
+          "terraform": {
+            "Name": "web-server-prod",
+            "Environment": "production",
+            "ManagedBy": "terraform"
+          },
+          "aws": {
+            "Name": "web-server-prod",
+            "Environment": "production",
+            "ManagedBy": "terraform",
+            "Owner": "devops-team"
+          },
+          "impact": "New tag added manually"
+        }
+      }
+    },
+    "alert_metadata": {
+      "scan_id": "scan_2025-08-09_20-58-40",
+      "first_detected": "2025-08-09T20:58:40.367976",
+      "last_seen": "2025-08-09T20:58:40.367976",
+      "occurrence_count": 1,
+      "environment": "production"
+    }
+  },
+  {
+    "alert_id": "alert_2025-08-09_20-58-40_sg-web-server",
+    "timestamp": "2025-08-09T20:58:40.380838",
+    "severity": "CRITICAL",
+    "status": "NEW",
+    "resource": {
+      "type": "aws_security_group",
+      "name": "web-server-sg",
+      "terraform_address": "aws_security_group.web_sg",
+      "aws_id": "sg-web-server"
+    },
+    "drift_details": {
+      "drift_type": "configuration",
+      "differences": {
+        "ingress_rules": {
+          "terraform": "HTTP(80), HTTPS(443)",
+          "aws": "HTTP(80), HTTPS(443), SSH(22)",
+          "impact": "New SSH access rule added - potential security risk"
+        }
+      }
+    },
+    "alert_metadata": {
+      "scan_id": "scan_2025-08-09_20-58-40",
+      "first_detected": "2025-08-09T20:58:40.367976",
+      "last_seen": "2025-08-09T20:58:40.367976",
+      "occurrence_count": 1,
+      "environment": "production"
+    }
+  },
+  {
+    "alert_id": "alert_2025-08-09_20-58-40_my-app-data-bucket-prod",
+    "timestamp": "2025-08-09T20:58:40.380838",
+    "severity": "MEDIUM",
+    "status": "NEW",
+    "resource": {
+      "type": "aws_s3_bucket",
+      "name": "app-data-bucket",
+      "terraform_address": "aws_s3_bucket.app_data",
+      "aws_id": "my-app-data-bucket-prod"
+    },
+    "drift_details": {
+      "drift_type": "configuration",
+      "differences": {
+        "encryption": {
+          "terraform": "AES256",
+          "aws": "aws:kms",
+          "impact": "Encryption method changed to KMS"
+        },
+        "tags": {
+          "terraform": {
+            "BackupRetention": "30-days"
+          },
+          "aws": "missing",
+          "impact": "Backup retention tag removed"
+        }
+      }
+    },
+    "alert_metadata": {
+      "scan_id": "scan_2025-08-09_20-58-40",
+      "first_detected": "2025-08-09T20:58:40.367976",
+      "last_seen": "2025-08-09T20:58:40.367976",
+      "occurrence_count": 1,
+      "environment": "production"
+    }
+  },
+  {
+    "alert_id": "alert_2025-08-09_20-58-40_i-9876543210fedcba0",
+    "timestamp": "2025-08-09T20:58:40.380838",
+    "severity": "MEDIUM",
+    "status": "NEW",
+    "resource": {
+      "type": "aws_instance",
+      "name": "manual-test-instance",
+      "terraform_address": "NOT_IN_TERRAFORM",
+      "aws_id": "i-9876543210fedcba0"
+    },
+    "drift_details": {
+      "drift_type": "extra",
+      "differences": {
+        "resource_existence": {
+          "terraform": "not_defined",
+          "aws": "exists",
+          "impact": "Manually created resource not managed by Terraform"
+        }
+      }
+    },
+    "alert_metadata": {
+      "scan_id": "scan_2025-08-09_20-58-40",
+      "first_detected": "2025-08-09T20:58:40.367976",
+      "last_seen": "2025-08-09T20:58:40.367976",
+      "occurrence_count": 1,
+      "environment": "production"
+    }
+  },
+  {
+    "alert_id": "alert_2025-08-09_20-58-40_i-1234567890abcdef0",
+    "timestamp": "2025-08-09T20:58:40.414385",
+    "severity": "HIGH",
+    "status": "NEW",
+    "resource": {
+      "type": "aws_instance",
+      "name": "web-server-prod",
+      "terraform_address": "aws_instance.web_server",
+      "aws_id": "i-1234567890abcdef0"
+    },
+    "drift_details": {
+      "drift_type": "configuration",
+      "differences": {
+        "instance_type": {
+          "terraform": "t3.medium",
+          "aws": "t3.large",
+          "impact": "Cost increase, performance change"
+        },
+        "tags": {
+          "terraform": {
+            "Name": "web-server-prod",
+            "Environment": "production",
+            "ManagedBy": "terraform"
+          },
+          "aws": {
+            "Name": "web-server-prod",
+            "Environment": "production",
+            "ManagedBy": "terraform",
+            "Owner": "devops-team"
+          },
+          "impact": "New tag added manually"
+        }
+      }
+    },
+    "alert_metadata": {
+      "scan_id": "scan_2025-08-09_20-58-40",
+      "first_detected": "2025-08-09T20:58:40.392332",
+      "last_seen": "2025-08-09T20:58:40.392332",
+      "occurrence_count": 1,
+      "environment": "production"
+    }
+  },
+  {
+    "alert_id": "alert_2025-08-09_20-58-40_sg-web-server",
+    "timestamp": "2025-08-09T20:58:40.414385",
+    "severity": "CRITICAL",
+    "status": "NEW",
+    "resource": {
+      "type": "aws_security_group",
+      "name": "web-server-sg",
+      "terraform_address": "aws_security_group.web_sg",
+      "aws_id": "sg-web-server"
+    },
+    "drift_details": {
+      "drift_type": "configuration",
+      "differences": {
+        "ingress_rules": {
+          "terraform": "HTTP(80), HTTPS(443)",
+          "aws": "HTTP(80), HTTPS(443), SSH(22)",
+          "impact": "New SSH access rule added - potential security risk"
+        }
+      }
+    },
+    "alert_metadata": {
+      "scan_id": "scan_2025-08-09_20-58-40",
+      "first_detected": "2025-08-09T20:58:40.392332",
+      "last_seen": "2025-08-09T20:58:40.392332",
+      "occurrence_count": 1,
+      "environment": "production"
+    }
+  },
+  {
+    "alert_id": "alert_2025-08-09_20-58-40_my-app-data-bucket-prod",
+    "timestamp": "2025-08-09T20:58:40.414385",
+    "severity": "MEDIUM",
+    "status": "NEW",
+    "resource": {
+      "type": "aws_s3_bucket",
+      "name": "app-data-bucket",
+      "terraform_address": "aws_s3_bucket.app_data",
+      "aws_id": "my-app-data-bucket-prod"
+    },
+    "drift_details": {
+      "drift_type": "configuration",
+      "differences": {
+        "encryption": {
+          "terraform": "AES256",
+          "aws": "aws:kms",
+          "impact": "Encryption method changed to KMS"
+        },
+        "tags": {
+          "terraform": {
+            "BackupRetention": "30-days"
+          },
+          "aws": "missing",
+          "impact": "Backup retention tag removed"
+        }
+      }
+    },
+    "alert_metadata": {
+      "scan_id": "scan_2025-08-09_20-58-40",
+      "first_detected": "2025-08-09T20:58:40.392332",
+      "last_seen": "2025-08-09T20:58:40.392332",
+      "occurrence_count": 1,
+      "environment": "production"
+    }
+  },
+  {
+    "alert_id": "alert_2025-08-09_20-58-40_i-9876543210fedcba0",
+    "timestamp": "2025-08-09T20:58:40.414385",
+    "severity": "MEDIUM",
+    "status": "NEW",
+    "resource": {
+      "type": "aws_instance",
+      "name": "manual-test-instance",
+      "terraform_address": "NOT_IN_TERRAFORM",
+      "aws_id": "i-9876543210fedcba0"
+    },
+    "drift_details": {
+      "drift_type": "extra",
+      "differences": {
+        "resource_existence": {
+          "terraform": "not_defined",
+          "aws": "exists",
+          "impact": "Manually created resource not managed by Terraform"
+        }
+      }
+    },
+    "alert_metadata": {
+      "scan_id": "scan_2025-08-09_20-58-40",
+      "first_detected": "2025-08-09T20:58:40.392332",
+      "last_seen": "2025-08-09T20:58:40.392332",
+      "occurrence_count": 1,
+      "environment": "production"
+    }
+  },
+  {
+    "alert_id": "alert_2025-08-09_20-58-45_i-1234567890abcdef0",
+    "timestamp": "2025-08-09T20:58:45.300231",
+    "severity": "HIGH",
+    "status": "NEW",
+    "resource": {
+      "type": "aws_instance",
+      "name": "web-server-prod",
+      "terraform_address": "aws_instance.web_server",
+      "aws_id": "i-1234567890abcdef0"
+    },
+    "drift_details": {
+      "drift_type": "configuration",
+      "differences": {
+        "instance_type": {
+          "terraform": "t3.medium",
+          "aws": "t3.large",
+          "impact": "Cost increase, performance change"
+        },
+        "tags": {
+          "terraform": {
+            "Name": "web-server-prod",
+            "Environment": "production",
+            "ManagedBy": "terraform"
+          },
+          "aws": {
+            "Name": "web-server-prod",
+            "Environment": "production",
+            "ManagedBy": "terraform",
+            "Owner": "devops-team"
+          },
+          "impact": "New tag added manually"
+        }
+      }
+    },
+    "alert_metadata": {
+      "scan_id": "scan_2025-08-09_20-58-45",
+      "first_detected": "2025-08-09T20:58:45.288758",
+      "last_seen": "2025-08-09T20:58:45.288758",
+      "occurrence_count": 1,
+      "environment": "production"
+    }
+  },
+  {
+    "alert_id": "alert_2025-08-09_20-58-45_sg-web-server",
+    "timestamp": "2025-08-09T20:58:45.300231",
+    "severity": "CRITICAL",
+    "status": "NEW",
+    "resource": {
+      "type": "aws_security_group",
+      "name": "web-server-sg",
+      "terraform_address": "aws_security_group.web_sg",
+      "aws_id": "sg-web-server"
+    },
+    "drift_details": {
+      "drift_type": "configuration",
+      "differences": {
+        "ingress_rules": {
+          "terraform": "HTTP(80), HTTPS(443)",
+          "aws": "HTTP(80), HTTPS(443), SSH(22)",
+          "impact": "New SSH access rule added - potential security risk"
+        }
+      }
+    },
+    "alert_metadata": {
+      "scan_id": "scan_2025-08-09_20-58-45",
+      "first_detected": "2025-08-09T20:58:45.288758",
+      "last_seen": "2025-08-09T20:58:45.288758",
+      "occurrence_count": 1,
+      "environment": "production"
+    }
+  },
+  {
+    "alert_id": "alert_2025-08-09_20-58-45_my-app-data-bucket-prod",
+    "timestamp": "2025-08-09T20:58:45.300231",
+    "severity": "MEDIUM",
+    "status": "NEW",
+    "resource": {
+      "type": "aws_s3_bucket",
+      "name": "app-data-bucket",
+      "terraform_address": "aws_s3_bucket.app_data",
+      "aws_id": "my-app-data-bucket-prod"
+    },
+    "drift_details": {
+      "drift_type": "configuration",
+      "differences": {
+        "encryption": {
+          "terraform": "AES256",
+          "aws": "aws:kms",
+          "impact": "Encryption method changed to KMS"
+        },
+        "tags": {
+          "terraform": {
+            "BackupRetention": "30-days"
+          },
+          "aws": "missing",
+          "impact": "Backup retention tag removed"
+        }
+      }
+    },
+    "alert_metadata": {
+      "scan_id": "scan_2025-08-09_20-58-45",
+      "first_detected": "2025-08-09T20:58:45.288758",
+      "last_seen": "2025-08-09T20:58:45.288758",
+      "occurrence_count": 1,
+      "environment": "production"
+    }
+  },
+  {
+    "alert_id": "alert_2025-08-09_20-58-45_i-9876543210fedcba0",
+    "timestamp": "2025-08-09T20:58:45.300231",
+    "severity": "MEDIUM",
+    "status": "NEW",
+    "resource": {
+      "type": "aws_instance",
+      "name": "manual-test-instance",
+      "terraform_address": "NOT_IN_TERRAFORM",
+      "aws_id": "i-9876543210fedcba0"
+    },
+    "drift_details": {
+      "drift_type": "extra",
+      "differences": {
+        "resource_existence": {
+          "terraform": "not_defined",
+          "aws": "exists",
+          "impact": "Manually created resource not managed by Terraform"
+        }
+      }
+    },
+    "alert_metadata": {
+      "scan_id": "scan_2025-08-09_20-58-45",
+      "first_detected": "2025-08-09T20:58:45.288758",
+      "last_seen": "2025-08-09T20:58:45.288758",
+      "occurrence_count": 1,
+      "environment": "production"
+    }
+  },
+  {
+    "alert_id": "alert_2025-08-09_20-58-45_i-1234567890abcdef0",
+    "timestamp": "2025-08-09T20:58:45.331841",
+    "severity": "HIGH",
+    "status": "NEW",
+    "resource": {
+      "type": "aws_instance",
+      "name": "web-server-prod",
+      "terraform_address": "aws_instance.web_server",
+      "aws_id": "i-1234567890abcdef0"
+    },
+    "drift_details": {
+      "drift_type": "configuration",
+      "differences": {
+        "instance_type": {
+          "terraform": "t3.medium",
+          "aws": "t3.large",
+          "impact": "Cost increase, performance change"
+        },
+        "tags": {
+          "terraform": {
+            "Name": "web-server-prod",
+            "Environment": "production",
+            "ManagedBy": "terraform"
+          },
+          "aws": {
+            "Name": "web-server-prod",
+            "Environment": "production",
+            "ManagedBy": "terraform",
+            "Owner": "devops-team"
+          },
+          "impact": "New tag added manually"
+        }
+      }
+    },
+    "alert_metadata": {
+      "scan_id": "scan_2025-08-09_20-58-45",
+      "first_detected": "2025-08-09T20:58:45.311124",
+      "last_seen": "2025-08-09T20:58:45.311124",
+      "occurrence_count": 1,
+      "environment": "production"
+    }
+  },
+  {
+    "alert_id": "alert_2025-08-09_20-58-45_sg-web-server",
+    "timestamp": "2025-08-09T20:58:45.331841",
+    "severity": "CRITICAL",
+    "status": "NEW",
+    "resource": {
+      "type": "aws_security_group",
+      "name": "web-server-sg",
+      "terraform_address": "aws_security_group.web_sg",
+      "aws_id": "sg-web-server"
+    },
+    "drift_details": {
+      "drift_type": "configuration",
+      "differences": {
+        "ingress_rules": {
+          "terraform": "HTTP(80), HTTPS(443)",
+          "aws": "HTTP(80), HTTPS(443), SSH(22)",
+          "impact": "New SSH access rule added - potential security risk"
+        }
+      }
+    },
+    "alert_metadata": {
+      "scan_id": "scan_2025-08-09_20-58-45",
+      "first_detected": "2025-08-09T20:58:45.311124",
+      "last_seen": "2025-08-09T20:58:45.311124",
+      "occurrence_count": 1,
+      "environment": "production"
+    }
+  },
+  {
+    "alert_id": "alert_2025-08-09_20-58-45_my-app-data-bucket-prod",
+    "timestamp": "2025-08-09T20:58:45.331841",
+    "severity": "MEDIUM",
+    "status": "NEW",
+    "resource": {
+      "type": "aws_s3_bucket",
+      "name": "app-data-bucket",
+      "terraform_address": "aws_s3_bucket.app_data",
+      "aws_id": "my-app-data-bucket-prod"
+    },
+    "drift_details": {
+      "drift_type": "configuration",
+      "differences": {
+        "encryption": {
+          "terraform": "AES256",
+          "aws": "aws:kms",
+          "impact": "Encryption method changed to KMS"
+        },
+        "tags": {
+          "terraform": {
+            "BackupRetention": "30-days"
+          },
+          "aws": "missing",
+          "impact": "Backup retention tag removed"
+        }
+      }
+    },
+    "alert_metadata": {
+      "scan_id": "scan_2025-08-09_20-58-45",
+      "first_detected": "2025-08-09T20:58:45.311124",
+      "last_seen": "2025-08-09T20:58:45.311124",
+      "occurrence_count": 1,
+      "environment": "production"
+    }
+  },
+  {
+    "alert_id": "alert_2025-08-09_20-58-45_i-9876543210fedcba0",
+    "timestamp": "2025-08-09T20:58:45.331841",
+    "severity": "MEDIUM",
+    "status": "NEW",
+    "resource": {
+      "type": "aws_instance",
+      "name": "manual-test-instance",
+      "terraform_address": "NOT_IN_TERRAFORM",
+      "aws_id": "i-9876543210fedcba0"
+    },
+    "drift_details": {
+      "drift_type": "extra",
+      "differences": {
+        "resource_existence": {
+          "terraform": "not_defined",
+          "aws": "exists",
+          "impact": "Manually created resource not managed by Terraform"
+        }
+      }
+    },
+    "alert_metadata": {
+      "scan_id": "scan_2025-08-09_20-58-45",
+      "first_detected": "2025-08-09T20:58:45.311124",
+      "last_seen": "2025-08-09T20:58:45.311124",
+      "occurrence_count": 1,
+      "environment": "production"
+    }
+  },
+  {
+    "alert_id": "alert_2025-08-09_21-03-40_i-1234567890abcdef0",
+    "timestamp": "2025-08-09T21:03:40.453357",
+    "severity": "HIGH",
+    "status": "NEW",
+    "resource": {
+      "type": "aws_instance",
+      "name": "web-server-prod",
+      "terraform_address": "aws_instance.web_server",
+      "aws_id": "i-1234567890abcdef0"
+    },
+    "drift_details": {
+      "drift_type": "configuration",
+      "differences": {
+        "instance_type": {
+          "terraform": "t3.medium",
+          "aws": "t3.large",
+          "impact": "Cost increase, performance change"
+        },
+        "tags": {
+          "terraform": {
+            "Name": "web-server-prod",
+            "Environment": "production",
+            "ManagedBy": "terraform"
+          },
+          "aws": {
+            "Name": "web-server-prod",
+            "Environment": "production",
+            "ManagedBy": "terraform",
+            "Owner": "devops-team"
+          },
+          "impact": "New tag added manually"
+        }
+      }
+    },
+    "alert_metadata": {
+      "scan_id": "scan_2025-08-09_21-03-40",
+      "first_detected": "2025-08-09T21:03:40.428958",
+      "last_seen": "2025-08-09T21:03:40.428958",
+      "occurrence_count": 1,
+      "environment": "production"
+    }
+  },
+  {
+    "alert_id": "alert_2025-08-09_21-03-40_sg-web-server",
+    "timestamp": "2025-08-09T21:03:40.453357",
+    "severity": "CRITICAL",
+    "status": "NEW",
+    "resource": {
+      "type": "aws_security_group",
+      "name": "web-server-sg",
+      "terraform_address": "aws_security_group.web_sg",
+      "aws_id": "sg-web-server"
+    },
+    "drift_details": {
+      "drift_type": "configuration",
+      "differences": {
+        "ingress_rules": {
+          "terraform": "HTTP(80), HTTPS(443)",
+          "aws": "HTTP(80), HTTPS(443), SSH(22)",
+          "impact": "New SSH access rule added - potential security risk"
+        }
+      }
+    },
+    "alert_metadata": {
+      "scan_id": "scan_2025-08-09_21-03-40",
+      "first_detected": "2025-08-09T21:03:40.428958",
+      "last_seen": "2025-08-09T21:03:40.428958",
+      "occurrence_count": 1,
+      "environment": "production"
+    }
+  },
+  {
+    "alert_id": "alert_2025-08-09_21-03-40_my-app-data-bucket-prod",
+    "timestamp": "2025-08-09T21:03:40.453357",
+    "severity": "MEDIUM",
+    "status": "NEW",
+    "resource": {
+      "type": "aws_s3_bucket",
+      "name": "app-data-bucket",
+      "terraform_address": "aws_s3_bucket.app_data",
+      "aws_id": "my-app-data-bucket-prod"
+    },
+    "drift_details": {
+      "drift_type": "configuration",
+      "differences": {
+        "encryption": {
+          "terraform": "AES256",
+          "aws": "aws:kms",
+          "impact": "Encryption method changed to KMS"
+        },
+        "tags": {
+          "terraform": {
+            "BackupRetention": "30-days"
+          },
+          "aws": "missing",
+          "impact": "Backup retention tag removed"
+        }
+      }
+    },
+    "alert_metadata": {
+      "scan_id": "scan_2025-08-09_21-03-40",
+      "first_detected": "2025-08-09T21:03:40.428958",
+      "last_seen": "2025-08-09T21:03:40.428958",
+      "occurrence_count": 1,
+      "environment": "production"
+    }
+  },
+  {
+    "alert_id": "alert_2025-08-09_21-03-40_i-9876543210fedcba0",
+    "timestamp": "2025-08-09T21:03:40.453357",
+    "severity": "MEDIUM",
+    "status": "NEW",
+    "resource": {
+      "type": "aws_instance",
+      "name": "manual-test-instance",
+      "terraform_address": "NOT_IN_TERRAFORM",
+      "aws_id": "i-9876543210fedcba0"
+    },
+    "drift_details": {
+      "drift_type": "extra",
+      "differences": {
+        "resource_existence": {
+          "terraform": "not_defined",
+          "aws": "exists",
+          "impact": "Manually created resource not managed by Terraform"
+        }
+      }
+    },
+    "alert_metadata": {
+      "scan_id": "scan_2025-08-09_21-03-40",
+      "first_detected": "2025-08-09T21:03:40.428958",
+      "last_seen": "2025-08-09T21:03:40.428958",
+      "occurrence_count": 1,
+      "environment": "production"
+    }
+  },
+  {
+    "alert_id": "alert_2025-08-09_21-03-45_i-1234567890abcdef0",
+    "timestamp": "2025-08-09T21:03:45.376979",
+    "severity": "HIGH",
+    "status": "NEW",
+    "resource": {
+      "type": "aws_instance",
+      "name": "web-server-prod",
+      "terraform_address": "aws_instance.web_server",
+      "aws_id": "i-1234567890abcdef0"
+    },
+    "drift_details": {
+      "drift_type": "configuration",
+      "differences": {
+        "instance_type": {
+          "terraform": "t3.medium",
+          "aws": "t3.large",
+          "impact": "Cost increase, performance change"
+        },
+        "tags": {
+          "terraform": {
+            "Name": "web-server-prod",
+            "Environment": "production",
+            "ManagedBy": "terraform"
+          },
+          "aws": {
+            "Name": "web-server-prod",
+            "Environment": "production",
+            "ManagedBy": "terraform",
+            "Owner": "devops-team"
+          },
+          "impact": "New tag added manually"
+        }
+      }
+    },
+    "alert_metadata": {
+      "scan_id": "scan_2025-08-09_21-03-45",
+      "first_detected": "2025-08-09T21:03:45.351924",
+      "last_seen": "2025-08-09T21:03:45.351924",
+      "occurrence_count": 1,
+      "environment": "production"
+    }
+  },
+  {
+    "alert_id": "alert_2025-08-09_21-03-45_sg-web-server",
+    "timestamp": "2025-08-09T21:03:45.376979",
+    "severity": "CRITICAL",
+    "status": "NEW",
+    "resource": {
+      "type": "aws_security_group",
+      "name": "web-server-sg",
+      "terraform_address": "aws_security_group.web_sg",
+      "aws_id": "sg-web-server"
+    },
+    "drift_details": {
+      "drift_type": "configuration",
+      "differences": {
+        "ingress_rules": {
+          "terraform": "HTTP(80), HTTPS(443)",
+          "aws": "HTTP(80), HTTPS(443), SSH(22)",
+          "impact": "New SSH access rule added - potential security risk"
+        }
+      }
+    },
+    "alert_metadata": {
+      "scan_id": "scan_2025-08-09_21-03-45",
+      "first_detected": "2025-08-09T21:03:45.351924",
+      "last_seen": "2025-08-09T21:03:45.351924",
+      "occurrence_count": 1,
+      "environment": "production"
+    }
+  },
+  {
+    "alert_id": "alert_2025-08-09_21-03-45_my-app-data-bucket-prod",
+    "timestamp": "2025-08-09T21:03:45.376979",
+    "severity": "MEDIUM",
+    "status": "NEW",
+    "resource": {
+      "type": "aws_s3_bucket",
+      "name": "app-data-bucket",
+      "terraform_address": "aws_s3_bucket.app_data",
+      "aws_id": "my-app-data-bucket-prod"
+    },
+    "drift_details": {
+      "drift_type": "configuration",
+      "differences": {
+        "encryption": {
+          "terraform": "AES256",
+          "aws": "aws:kms",
+          "impact": "Encryption method changed to KMS"
+        },
+        "tags": {
+          "terraform": {
+            "BackupRetention": "30-days"
+          },
+          "aws": "missing",
+          "impact": "Backup retention tag removed"
+        }
+      }
+    },
+    "alert_metadata": {
+      "scan_id": "scan_2025-08-09_21-03-45",
+      "first_detected": "2025-08-09T21:03:45.351924",
+      "last_seen": "2025-08-09T21:03:45.351924",
+      "occurrence_count": 1,
+      "environment": "production"
+    }
+  },
+  {
+    "alert_id": "alert_2025-08-09_21-03-45_i-9876543210fedcba0",
+    "timestamp": "2025-08-09T21:03:45.376979",
+    "severity": "MEDIUM",
+    "status": "NEW",
+    "resource": {
+      "type": "aws_instance",
+      "name": "manual-test-instance",
+      "terraform_address": "NOT_IN_TERRAFORM",
+      "aws_id": "i-9876543210fedcba0"
+    },
+    "drift_details": {
+      "drift_type": "extra",
+      "differences": {
+        "resource_existence": {
+          "terraform": "not_defined",
+          "aws": "exists",
+          "impact": "Manually created resource not managed by Terraform"
+        }
+      }
+    },
+    "alert_metadata": {
+      "scan_id": "scan_2025-08-09_21-03-45",
+      "first_detected": "2025-08-09T21:03:45.351924",
+      "last_seen": "2025-08-09T21:03:45.351924",
+      "occurrence_count": 1,
+      "environment": "production"
+    }
+  },
+  {
+    "alert_id": "alert_2025-08-09_21-06-51_i-1234567890abcdef0",
+    "timestamp": "2025-08-09T21:06:51.264621",
+    "severity": "HIGH",
+    "status": "NEW",
+    "resource": {
+      "type": "aws_instance",
+      "name": "web-server-prod",
+      "terraform_address": "aws_instance.web_server",
+      "aws_id": "i-1234567890abcdef0"
+    },
+    "drift_details": {
+      "drift_type": "configuration",
+      "differences": {
+        "instance_type": {
+          "terraform": "t3.medium",
+          "aws": "t3.large",
+          "impact": "Cost increase, performance change"
+        },
+        "tags": {
+          "terraform": {
+            "Name": "web-server-prod",
+            "Environment": "production",
+            "ManagedBy": "terraform"
+          },
+          "aws": {
+            "Name": "web-server-prod",
+            "Environment": "production",
+            "ManagedBy": "terraform",
+            "Owner": "devops-team"
+          },
+          "impact": "New tag added manually"
+        }
+      }
+    },
+    "alert_metadata": {
+      "scan_id": "scan_2025-08-09_21-06-51",
+      "first_detected": "2025-08-09T21:06:51.250412",
+      "last_seen": "2025-08-09T21:06:51.250412",
+      "occurrence_count": 1,
+      "environment": "production"
+    }
+  },
+  {
+    "alert_id": "alert_2025-08-09_21-06-51_sg-web-server",
+    "timestamp": "2025-08-09T21:06:51.264621",
+    "severity": "CRITICAL",
+    "status": "NEW",
+    "resource": {
+      "type": "aws_security_group",
+      "name": "web-server-sg",
+      "terraform_address": "aws_security_group.web_sg",
+      "aws_id": "sg-web-server"
+    },
+    "drift_details": {
+      "drift_type": "configuration",
+      "differences": {
+        "ingress_rules": {
+          "terraform": "HTTP(80), HTTPS(443)",
+          "aws": "HTTP(80), HTTPS(443), SSH(22)",
+          "impact": "New SSH access rule added - potential security risk"
+        }
+      }
+    },
+    "alert_metadata": {
+      "scan_id": "scan_2025-08-09_21-06-51",
+      "first_detected": "2025-08-09T21:06:51.250412",
+      "last_seen": "2025-08-09T21:06:51.250412",
+      "occurrence_count": 1,
+      "environment": "production"
+    }
+  },
+  {
+    "alert_id": "alert_2025-08-09_21-06-51_my-app-data-bucket-prod",
+    "timestamp": "2025-08-09T21:06:51.264621",
+    "severity": "MEDIUM",
+    "status": "NEW",
+    "resource": {
+      "type": "aws_s3_bucket",
+      "name": "app-data-bucket",
+      "terraform_address": "aws_s3_bucket.app_data",
+      "aws_id": "my-app-data-bucket-prod"
+    },
+    "drift_details": {
+      "drift_type": "configuration",
+      "differences": {
+        "encryption": {
+          "terraform": "AES256",
+          "aws": "aws:kms",
+          "impact": "Encryption method changed to KMS"
+        },
+        "tags": {
+          "terraform": {
+            "BackupRetention": "30-days"
+          },
+          "aws": "missing",
+          "impact": "Backup retention tag removed"
+        }
+      }
+    },
+    "alert_metadata": {
+      "scan_id": "scan_2025-08-09_21-06-51",
+      "first_detected": "2025-08-09T21:06:51.250412",
+      "last_seen": "2025-08-09T21:06:51.250412",
+      "occurrence_count": 1,
+      "environment": "production"
+    }
+  },
+  {
+    "alert_id": "alert_2025-08-09_21-06-51_i-9876543210fedcba0",
+    "timestamp": "2025-08-09T21:06:51.264621",
+    "severity": "MEDIUM",
+    "status": "NEW",
+    "resource": {
+      "type": "aws_instance",
+      "name": "manual-test-instance",
+      "terraform_address": "NOT_IN_TERRAFORM",
+      "aws_id": "i-9876543210fedcba0"
+    },
+    "drift_details": {
+      "drift_type": "extra",
+      "differences": {
+        "resource_existence": {
+          "terraform": "not_defined",
+          "aws": "exists",
+          "impact": "Manually created resource not managed by Terraform"
+        }
+      }
+    },
+    "alert_metadata": {
+      "scan_id": "scan_2025-08-09_21-06-51",
+      "first_detected": "2025-08-09T21:06:51.250412",
+      "last_seen": "2025-08-09T21:06:51.250412",
+      "occurrence_count": 1,
+      "environment": "production"
+    }
+  },
+  {
+    "alert_id": "alert_2025-08-09_21-42-35_i-1234567890abcdef0",
+    "timestamp": "2025-08-09T21:42:35.030510",
+    "severity": "HIGH",
+    "status": "NEW",
+    "resource": {
+      "type": "aws_instance",
+      "name": "web-server-prod",
+      "terraform_address": "aws_instance.web_server",
+      "aws_id": "i-1234567890abcdef0"
+    },
+    "drift_details": {
+      "drift_type": "configuration",
+      "differences": {
+        "instance_type": {
+          "terraform": "t3.medium",
+          "aws": "t3.large",
+          "impact": "Cost increase, performance change"
+        },
+        "tags": {
+          "terraform": {
+            "Name": "web-server-prod",
+            "Environment": "production",
+            "ManagedBy": "terraform"
+          },
+          "aws": {
+            "Name": "web-server-prod",
+            "Environment": "production",
+            "ManagedBy": "terraform",
+            "Owner": "devops-team"
+          },
+          "impact": "New tag added manually"
+        }
+      }
+    },
+    "alert_metadata": {
+      "scan_id": "scan_2025-08-09_21-42-35",
+      "first_detected": "2025-08-09T21:42:35.014486",
+      "last_seen": "2025-08-09T21:42:35.014486",
+      "occurrence_count": 1,
+      "environment": "production"
+    }
+  },
+  {
+    "alert_id": "alert_2025-08-09_21-42-35_sg-web-server",
+    "timestamp": "2025-08-09T21:42:35.030510",
+    "severity": "CRITICAL",
+    "status": "NEW",
+    "resource": {
+      "type": "aws_security_group",
+      "name": "web-server-sg",
+      "terraform_address": "aws_security_group.web_sg",
+      "aws_id": "sg-web-server"
+    },
+    "drift_details": {
+      "drift_type": "configuration",
+      "differences": {
+        "ingress_rules": {
+          "terraform": "HTTP(80), HTTPS(443)",
+          "aws": "HTTP(80), HTTPS(443), SSH(22)",
+          "impact": "New SSH access rule added - potential security risk"
+        }
+      }
+    },
+    "alert_metadata": {
+      "scan_id": "scan_2025-08-09_21-42-35",
+      "first_detected": "2025-08-09T21:42:35.014486",
+      "last_seen": "2025-08-09T21:42:35.014486",
+      "occurrence_count": 1,
+      "environment": "production"
+    }
+  },
+  {
+    "alert_id": "alert_2025-08-09_21-42-35_my-app-data-bucket-prod",
+    "timestamp": "2025-08-09T21:42:35.030510",
+    "severity": "MEDIUM",
+    "status": "NEW",
+    "resource": {
+      "type": "aws_s3_bucket",
+      "name": "app-data-bucket",
+      "terraform_address": "aws_s3_bucket.app_data",
+      "aws_id": "my-app-data-bucket-prod"
+    },
+    "drift_details": {
+      "drift_type": "configuration",
+      "differences": {
+        "encryption": {
+          "terraform": "AES256",
+          "aws": "aws:kms",
+          "impact": "Encryption method changed to KMS"
+        },
+        "tags": {
+          "terraform": {
+            "BackupRetention": "30-days"
+          },
+          "aws": "missing",
+          "impact": "Backup retention tag removed"
+        }
+      }
+    },
+    "alert_metadata": {
+      "scan_id": "scan_2025-08-09_21-42-35",
+      "first_detected": "2025-08-09T21:42:35.014486",
+      "last_seen": "2025-08-09T21:42:35.014486",
+      "occurrence_count": 1,
+      "environment": "production"
+    }
+  },
+  {
+    "alert_id": "alert_2025-08-09_21-42-35_i-9876543210fedcba0",
+    "timestamp": "2025-08-09T21:42:35.030510",
+    "severity": "MEDIUM",
+    "status": "NEW",
+    "resource": {
+      "type": "aws_instance",
+      "name": "manual-test-instance",
+      "terraform_address": "NOT_IN_TERRAFORM",
+      "aws_id": "i-9876543210fedcba0"
+    },
+    "drift_details": {
+      "drift_type": "extra",
+      "differences": {
+        "resource_existence": {
+          "terraform": "not_defined",
+          "aws": "exists",
+          "impact": "Manually created resource not managed by Terraform"
+        }
+      }
+    },
+    "alert_metadata": {
+      "scan_id": "scan_2025-08-09_21-42-35",
+      "first_detected": "2025-08-09T21:42:35.014486",
+      "last_seen": "2025-08-09T21:42:35.014486",
+      "occurrence_count": 1,
+      "environment": "production"
+    }
+  },
+  {
+    "alert_id": "alert_2025-08-09_21-42-39_i-1234567890abcdef0",
+    "timestamp": "2025-08-09T21:42:39.957748",
+    "severity": "HIGH",
+    "status": "NEW",
+    "resource": {
+      "type": "aws_instance",
+      "name": "web-server-prod",
+      "terraform_address": "aws_instance.web_server",
+      "aws_id": "i-1234567890abcdef0"
+    },
+    "drift_details": {
+      "drift_type": "configuration",
+      "differences": {
+        "instance_type": {
+          "terraform": "t3.medium",
+          "aws": "t3.large",
+          "impact": "Cost increase, performance change"
+        },
+        "tags": {
+          "terraform": {
+            "Name": "web-server-prod",
+            "Environment": "production",
+            "ManagedBy": "terraform"
+          },
+          "aws": {
+            "Name": "web-server-prod",
+            "Environment": "production",
+            "ManagedBy": "terraform",
+            "Owner": "devops-team"
+          },
+          "impact": "New tag added manually"
+        }
+      }
+    },
+    "alert_metadata": {
+      "scan_id": "scan_2025-08-09_21-42-39",
+      "first_detected": "2025-08-09T21:42:39.931005",
+      "last_seen": "2025-08-09T21:42:39.931005",
+      "occurrence_count": 1,
+      "environment": "production"
+    }
+  },
+  {
+    "alert_id": "alert_2025-08-09_21-42-39_sg-web-server",
+    "timestamp": "2025-08-09T21:42:39.957748",
+    "severity": "CRITICAL",
+    "status": "NEW",
+    "resource": {
+      "type": "aws_security_group",
+      "name": "web-server-sg",
+      "terraform_address": "aws_security_group.web_sg",
+      "aws_id": "sg-web-server"
+    },
+    "drift_details": {
+      "drift_type": "configuration",
+      "differences": {
+        "ingress_rules": {
+          "terraform": "HTTP(80), HTTPS(443)",
+          "aws": "HTTP(80), HTTPS(443), SSH(22)",
+          "impact": "New SSH access rule added - potential security risk"
+        }
+      }
+    },
+    "alert_metadata": {
+      "scan_id": "scan_2025-08-09_21-42-39",
+      "first_detected": "2025-08-09T21:42:39.931005",
+      "last_seen": "2025-08-09T21:42:39.931005",
+      "occurrence_count": 1,
+      "environment": "production"
+    }
+  },
+  {
+    "alert_id": "alert_2025-08-09_21-42-39_my-app-data-bucket-prod",
+    "timestamp": "2025-08-09T21:42:39.957748",
+    "severity": "MEDIUM",
+    "status": "NEW",
+    "resource": {
+      "type": "aws_s3_bucket",
+      "name": "app-data-bucket",
+      "terraform_address": "aws_s3_bucket.app_data",
+      "aws_id": "my-app-data-bucket-prod"
+    },
+    "drift_details": {
+      "drift_type": "configuration",
+      "differences": {
+        "encryption": {
+          "terraform": "AES256",
+          "aws": "aws:kms",
+          "impact": "Encryption method changed to KMS"
+        },
+        "tags": {
+          "terraform": {
+            "BackupRetention": "30-days"
+          },
+          "aws": "missing",
+          "impact": "Backup retention tag removed"
+        }
+      }
+    },
+    "alert_metadata": {
+      "scan_id": "scan_2025-08-09_21-42-39",
+      "first_detected": "2025-08-09T21:42:39.931005",
+      "last_seen": "2025-08-09T21:42:39.931005",
+      "occurrence_count": 1,
+      "environment": "production"
+    }
+  },
+  {
+    "alert_id": "alert_2025-08-09_21-42-39_i-9876543210fedcba0",
+    "timestamp": "2025-08-09T21:42:39.957748",
+    "severity": "MEDIUM",
+    "status": "NEW",
+    "resource": {
+      "type": "aws_instance",
+      "name": "manual-test-instance",
+      "terraform_address": "NOT_IN_TERRAFORM",
+      "aws_id": "i-9876543210fedcba0"
+    },
+    "drift_details": {
+      "drift_type": "extra",
+      "differences": {
+        "resource_existence": {
+          "terraform": "not_defined",
+          "aws": "exists",
+          "impact": "Manually created resource not managed by Terraform"
+        }
+      }
+    },
+    "alert_metadata": {
+      "scan_id": "scan_2025-08-09_21-42-39",
+      "first_detected": "2025-08-09T21:42:39.931005",
+      "last_seen": "2025-08-09T21:42:39.931005",
+      "occurrence_count": 1,
+      "environment": "production"
+    }
+  },
+  {
+    "alert_id": "alert_2025-08-09_21-47-35_i-1234567890abcdef0",
+    "timestamp": "2025-08-09T21:47:35.073606",
+    "severity": "HIGH",
+    "status": "NEW",
+    "resource": {
+      "type": "aws_instance",
+      "name": "web-server-prod",
+      "terraform_address": "aws_instance.web_server",
+      "aws_id": "i-1234567890abcdef0"
+    },
+    "drift_details": {
+      "drift_type": "configuration",
+      "differences": {
+        "instance_type": {
+          "terraform": "t3.medium",
+          "aws": "t3.large",
+          "impact": "Cost increase, performance change"
+        },
+        "tags": {
+          "terraform": {
+            "Name": "web-server-prod",
+            "Environment": "production",
+            "ManagedBy": "terraform"
+          },
+          "aws": {
+            "Name": "web-server-prod",
+            "Environment": "production",
+            "ManagedBy": "terraform",
+            "Owner": "devops-team"
+          },
+          "impact": "New tag added manually"
+        }
+      }
+    },
+    "alert_metadata": {
+      "scan_id": "scan_2025-08-09_21-47-35",
+      "first_detected": "2025-08-09T21:47:35.047784",
+      "last_seen": "2025-08-09T21:47:35.047784",
+      "occurrence_count": 1,
+      "environment": "production"
+    }
+  },
+  {
+    "alert_id": "alert_2025-08-09_21-47-35_sg-web-server",
+    "timestamp": "2025-08-09T21:47:35.073606",
+    "severity": "CRITICAL",
+    "status": "NEW",
+    "resource": {
+      "type": "aws_security_group",
+      "name": "web-server-sg",
+      "terraform_address": "aws_security_group.web_sg",
+      "aws_id": "sg-web-server"
+    },
+    "drift_details": {
+      "drift_type": "configuration",
+      "differences": {
+        "ingress_rules": {
+          "terraform": "HTTP(80), HTTPS(443)",
+          "aws": "HTTP(80), HTTPS(443), SSH(22)",
+          "impact": "New SSH access rule added - potential security risk"
+        }
+      }
+    },
+    "alert_metadata": {
+      "scan_id": "scan_2025-08-09_21-47-35",
+      "first_detected": "2025-08-09T21:47:35.047784",
+      "last_seen": "2025-08-09T21:47:35.047784",
+      "occurrence_count": 1,
+      "environment": "production"
+    }
+  },
+  {
+    "alert_id": "alert_2025-08-09_21-47-35_my-app-data-bucket-prod",
+    "timestamp": "2025-08-09T21:47:35.073606",
+    "severity": "MEDIUM",
+    "status": "NEW",
+    "resource": {
+      "type": "aws_s3_bucket",
+      "name": "app-data-bucket",
+      "terraform_address": "aws_s3_bucket.app_data",
+      "aws_id": "my-app-data-bucket-prod"
+    },
+    "drift_details": {
+      "drift_type": "configuration",
+      "differences": {
+        "encryption": {
+          "terraform": "AES256",
+          "aws": "aws:kms",
+          "impact": "Encryption method changed to KMS"
+        },
+        "tags": {
+          "terraform": {
+            "BackupRetention": "30-days"
+          },
+          "aws": "missing",
+          "impact": "Backup retention tag removed"
+        }
+      }
+    },
+    "alert_metadata": {
+      "scan_id": "scan_2025-08-09_21-47-35",
+      "first_detected": "2025-08-09T21:47:35.047784",
+      "last_seen": "2025-08-09T21:47:35.047784",
+      "occurrence_count": 1,
+      "environment": "production"
+    }
+  },
+  {
+    "alert_id": "alert_2025-08-09_21-47-35_i-9876543210fedcba0",
+    "timestamp": "2025-08-09T21:47:35.073606",
+    "severity": "MEDIUM",
+    "status": "NEW",
+    "resource": {
+      "type": "aws_instance",
+      "name": "manual-test-instance",
+      "terraform_address": "NOT_IN_TERRAFORM",
+      "aws_id": "i-9876543210fedcba0"
+    },
+    "drift_details": {
+      "drift_type": "extra",
+      "differences": {
+        "resource_existence": {
+          "terraform": "not_defined",
+          "aws": "exists",
+          "impact": "Manually created resource not managed by Terraform"
+        }
+      }
+    },
+    "alert_metadata": {
+      "scan_id": "scan_2025-08-09_21-47-35",
+      "first_detected": "2025-08-09T21:47:35.047784",
+      "last_seen": "2025-08-09T21:47:35.047784",
+      "occurrence_count": 1,
+      "environment": "production"
+    }
+  },
+  {
+    "alert_id": "alert_2025-08-09_21-47-40_i-1234567890abcdef0",
+    "timestamp": "2025-08-09T21:47:40.014024",
+    "severity": "HIGH",
+    "status": "NEW",
+    "resource": {
+      "type": "aws_instance",
+      "name": "web-server-prod",
+      "terraform_address": "aws_instance.web_server",
+      "aws_id": "i-1234567890abcdef0"
+    },
+    "drift_details": {
+      "drift_type": "configuration",
+      "differences": {
+        "instance_type": {
+          "terraform": "t3.medium",
+          "aws": "t3.large",
+          "impact": "Cost increase, performance change"
+        },
+        "tags": {
+          "terraform": {
+            "Name": "web-server-prod",
+            "Environment": "production",
+            "ManagedBy": "terraform"
+          },
+          "aws": {
+            "Name": "web-server-prod",
+            "Environment": "production",
+            "ManagedBy": "terraform",
+            "Owner": "devops-team"
+          },
+          "impact": "New tag added manually"
+        }
+      }
+    },
+    "alert_metadata": {
+      "scan_id": "scan_2025-08-09_21-47-39",
+      "first_detected": "2025-08-09T21:47:39.992825",
+      "last_seen": "2025-08-09T21:47:39.992825",
+      "occurrence_count": 1,
+      "environment": "production"
+    }
+  },
+  {
+    "alert_id": "alert_2025-08-09_21-47-40_sg-web-server",
+    "timestamp": "2025-08-09T21:47:40.014024",
+    "severity": "CRITICAL",
+    "status": "NEW",
+    "resource": {
+      "type": "aws_security_group",
+      "name": "web-server-sg",
+      "terraform_address": "aws_security_group.web_sg",
+      "aws_id": "sg-web-server"
+    },
+    "drift_details": {
+      "drift_type": "configuration",
+      "differences": {
+        "ingress_rules": {
+          "terraform": "HTTP(80), HTTPS(443)",
+          "aws": "HTTP(80), HTTPS(443), SSH(22)",
+          "impact": "New SSH access rule added - potential security risk"
+        }
+      }
+    },
+    "alert_metadata": {
+      "scan_id": "scan_2025-08-09_21-47-39",
+      "first_detected": "2025-08-09T21:47:39.992825",
+      "last_seen": "2025-08-09T21:47:39.992825",
+      "occurrence_count": 1,
+      "environment": "production"
+    }
+  },
+  {
+    "alert_id": "alert_2025-08-09_21-47-40_my-app-data-bucket-prod",
+    "timestamp": "2025-08-09T21:47:40.014024",
+    "severity": "MEDIUM",
+    "status": "NEW",
+    "resource": {
+      "type": "aws_s3_bucket",
+      "name": "app-data-bucket",
+      "terraform_address": "aws_s3_bucket.app_data",
+      "aws_id": "my-app-data-bucket-prod"
+    },
+    "drift_details": {
+      "drift_type": "configuration",
+      "differences": {
+        "encryption": {
+          "terraform": "AES256",
+          "aws": "aws:kms",
+          "impact": "Encryption method changed to KMS"
+        },
+        "tags": {
+          "terraform": {
+            "BackupRetention": "30-days"
+          },
+          "aws": "missing",
+          "impact": "Backup retention tag removed"
+        }
+      }
+    },
+    "alert_metadata": {
+      "scan_id": "scan_2025-08-09_21-47-39",
+      "first_detected": "2025-08-09T21:47:39.992825",
+      "last_seen": "2025-08-09T21:47:39.992825",
+      "occurrence_count": 1,
+      "environment": "production"
+    }
+  },
+  {
+    "alert_id": "alert_2025-08-09_21-47-40_i-9876543210fedcba0",
+    "timestamp": "2025-08-09T21:47:40.014024",
+    "severity": "MEDIUM",
+    "status": "NEW",
+    "resource": {
+      "type": "aws_instance",
+      "name": "manual-test-instance",
+      "terraform_address": "NOT_IN_TERRAFORM",
+      "aws_id": "i-9876543210fedcba0"
+    },
+    "drift_details": {
+      "drift_type": "extra",
+      "differences": {
+        "resource_existence": {
+          "terraform": "not_defined",
+          "aws": "exists",
+          "impact": "Manually created resource not managed by Terraform"
+        }
+      }
+    },
+    "alert_metadata": {
+      "scan_id": "scan_2025-08-09_21-47-39",
+      "first_detected": "2025-08-09T21:47:39.992825",
+      "last_seen": "2025-08-09T21:47:39.992825",
+      "occurrence_count": 1,
+      "environment": "production"
+    }
+  },
+  {
+    "alert_id": "alert_2025-08-09_21-50-31_i-1234567890abcdef0",
+    "timestamp": "2025-08-09T21:50:31.636358",
+    "severity": "HIGH",
+    "status": "NEW",
+    "resource": {
+      "type": "aws_instance",
+      "name": "web-server-prod",
+      "terraform_address": "aws_instance.web_server",
+      "aws_id": "i-1234567890abcdef0"
+    },
+    "drift_details": {
+      "drift_type": "configuration",
+      "differences": {
+        "instance_type": {
+          "terraform": "t3.medium",
+          "aws": "t3.large",
+          "impact": "Cost increase, performance change"
+        },
+        "tags": {
+          "terraform": {
+            "Name": "web-server-prod",
+            "Environment": "production",
+            "ManagedBy": "terraform"
+          },
+          "aws": {
+            "Name": "web-server-prod",
+            "Environment": "production",
+            "ManagedBy": "terraform",
+            "Owner": "devops-team"
+          },
+          "impact": "New tag added manually"
+        }
+      }
+    },
+    "alert_metadata": {
+      "scan_id": "scan_2025-08-09_21-50-31",
+      "first_detected": "2025-08-09T21:50:31.615893",
+      "last_seen": "2025-08-09T21:50:31.615893",
+      "occurrence_count": 1,
+      "environment": "production"
+    }
+  },
+  {
+    "alert_id": "alert_2025-08-09_21-50-31_sg-web-server",
+    "timestamp": "2025-08-09T21:50:31.636358",
+    "severity": "CRITICAL",
+    "status": "NEW",
+    "resource": {
+      "type": "aws_security_group",
+      "name": "web-server-sg",
+      "terraform_address": "aws_security_group.web_sg",
+      "aws_id": "sg-web-server"
+    },
+    "drift_details": {
+      "drift_type": "configuration",
+      "differences": {
+        "ingress_rules": {
+          "terraform": "HTTP(80), HTTPS(443)",
+          "aws": "HTTP(80), HTTPS(443), SSH(22)",
+          "impact": "New SSH access rule added - potential security risk"
+        }
+      }
+    },
+    "alert_metadata": {
+      "scan_id": "scan_2025-08-09_21-50-31",
+      "first_detected": "2025-08-09T21:50:31.615893",
+      "last_seen": "2025-08-09T21:50:31.615893",
+      "occurrence_count": 1,
+      "environment": "production"
+    }
+  },
+  {
+    "alert_id": "alert_2025-08-09_21-50-31_my-app-data-bucket-prod",
+    "timestamp": "2025-08-09T21:50:31.636358",
+    "severity": "MEDIUM",
+    "status": "NEW",
+    "resource": {
+      "type": "aws_s3_bucket",
+      "name": "app-data-bucket",
+      "terraform_address": "aws_s3_bucket.app_data",
+      "aws_id": "my-app-data-bucket-prod"
+    },
+    "drift_details": {
+      "drift_type": "configuration",
+      "differences": {
+        "encryption": {
+          "terraform": "AES256",
+          "aws": "aws:kms",
+          "impact": "Encryption method changed to KMS"
+        },
+        "tags": {
+          "terraform": {
+            "BackupRetention": "30-days"
+          },
+          "aws": "missing",
+          "impact": "Backup retention tag removed"
+        }
+      }
+    },
+    "alert_metadata": {
+      "scan_id": "scan_2025-08-09_21-50-31",
+      "first_detected": "2025-08-09T21:50:31.615893",
+      "last_seen": "2025-08-09T21:50:31.615893",
+      "occurrence_count": 1,
+      "environment": "production"
+    }
+  },
+  {
+    "alert_id": "alert_2025-08-09_21-50-31_i-9876543210fedcba0",
+    "timestamp": "2025-08-09T21:50:31.636358",
+    "severity": "MEDIUM",
+    "status": "NEW",
+    "resource": {
+      "type": "aws_instance",
+      "name": "manual-test-instance",
+      "terraform_address": "NOT_IN_TERRAFORM",
+      "aws_id": "i-9876543210fedcba0"
+    },
+    "drift_details": {
+      "drift_type": "extra",
+      "differences": {
+        "resource_existence": {
+          "terraform": "not_defined",
+          "aws": "exists",
+          "impact": "Manually created resource not managed by Terraform"
+        }
+      }
+    },
+    "alert_metadata": {
+      "scan_id": "scan_2025-08-09_21-50-31",
+      "first_detected": "2025-08-09T21:50:31.615893",
+      "last_seen": "2025-08-09T21:50:31.615893",
+      "occurrence_count": 1,
+      "environment": "production"
+    }
+  },
+  {
+    "alert_id": "alert_2025-08-09_21-50-31_i-1234567890abcdef0",
+    "timestamp": "2025-08-09T21:50:31.673999",
+    "severity": "HIGH",
+    "status": "NEW",
+    "resource": {
+      "type": "aws_instance",
+      "name": "web-server-prod",
+      "terraform_address": "aws_instance.web_server",
+      "aws_id": "i-1234567890abcdef0"
+    },
+    "drift_details": {
+      "drift_type": "configuration",
+      "differences": {
+        "instance_type": {
+          "terraform": "t3.medium",
+          "aws": "t3.large",
+          "impact": "Cost increase, performance change"
+        },
+        "tags": {
+          "terraform": {
+            "Name": "web-server-prod",
+            "Environment": "production",
+            "ManagedBy": "terraform"
+          },
+          "aws": {
+            "Name": "web-server-prod",
+            "Environment": "production",
+            "ManagedBy": "terraform",
+            "Owner": "devops-team"
+          },
+          "impact": "New tag added manually"
+        }
+      }
+    },
+    "alert_metadata": {
+      "scan_id": "scan_2025-08-09_21-50-31",
+      "first_detected": "2025-08-09T21:50:31.656590",
+      "last_seen": "2025-08-09T21:50:31.656590",
+      "occurrence_count": 1,
+      "environment": "production"
+    }
+  },
+  {
+    "alert_id": "alert_2025-08-09_21-50-31_sg-web-server",
+    "timestamp": "2025-08-09T21:50:31.673999",
+    "severity": "CRITICAL",
+    "status": "NEW",
+    "resource": {
+      "type": "aws_security_group",
+      "name": "web-server-sg",
+      "terraform_address": "aws_security_group.web_sg",
+      "aws_id": "sg-web-server"
+    },
+    "drift_details": {
+      "drift_type": "configuration",
+      "differences": {
+        "ingress_rules": {
+          "terraform": "HTTP(80), HTTPS(443)",
+          "aws": "HTTP(80), HTTPS(443), SSH(22)",
+          "impact": "New SSH access rule added - potential security risk"
+        }
+      }
+    },
+    "alert_metadata": {
+      "scan_id": "scan_2025-08-09_21-50-31",
+      "first_detected": "2025-08-09T21:50:31.656590",
+      "last_seen": "2025-08-09T21:50:31.656590",
+      "occurrence_count": 1,
+      "environment": "production"
+    }
+  },
+  {
+    "alert_id": "alert_2025-08-09_21-50-31_my-app-data-bucket-prod",
+    "timestamp": "2025-08-09T21:50:31.673999",
+    "severity": "MEDIUM",
+    "status": "NEW",
+    "resource": {
+      "type": "aws_s3_bucket",
+      "name": "app-data-bucket",
+      "terraform_address": "aws_s3_bucket.app_data",
+      "aws_id": "my-app-data-bucket-prod"
+    },
+    "drift_details": {
+      "drift_type": "configuration",
+      "differences": {
+        "encryption": {
+          "terraform": "AES256",
+          "aws": "aws:kms",
+          "impact": "Encryption method changed to KMS"
+        },
+        "tags": {
+          "terraform": {
+            "BackupRetention": "30-days"
+          },
+          "aws": "missing",
+          "impact": "Backup retention tag removed"
+        }
+      }
+    },
+    "alert_metadata": {
+      "scan_id": "scan_2025-08-09_21-50-31",
+      "first_detected": "2025-08-09T21:50:31.656590",
+      "last_seen": "2025-08-09T21:50:31.656590",
+      "occurrence_count": 1,
+      "environment": "production"
+    }
+  },
+  {
+    "alert_id": "alert_2025-08-09_21-50-31_i-9876543210fedcba0",
+    "timestamp": "2025-08-09T21:50:31.673999",
+    "severity": "MEDIUM",
+    "status": "NEW",
+    "resource": {
+      "type": "aws_instance",
+      "name": "manual-test-instance",
+      "terraform_address": "NOT_IN_TERRAFORM",
+      "aws_id": "i-9876543210fedcba0"
+    },
+    "drift_details": {
+      "drift_type": "extra",
+      "differences": {
+        "resource_existence": {
+          "terraform": "not_defined",
+          "aws": "exists",
+          "impact": "Manually created resource not managed by Terraform"
+        }
+      }
+    },
+    "alert_metadata": {
+      "scan_id": "scan_2025-08-09_21-50-31",
+      "first_detected": "2025-08-09T21:50:31.656590",
+      "last_seen": "2025-08-09T21:50:31.656590",
+      "occurrence_count": 1,
+      "environment": "production"
+    }
+  }
+]

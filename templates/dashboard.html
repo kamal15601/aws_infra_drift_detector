@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWS Terraform Drift Detection Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .header-info {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .status-running {
+            background-color: #4caf50;
+            color: white;
+        }
+        
+        .status-stopped {
+            background-color: #f44336;
+            color: white;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.2s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-2px);
+        }
+        
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .stat-number.critical {
+            color: #e74c3c;
+        }
+        
+        .stat-number.warning {
+            color: #f39c12;
+        }
+        
+        .stat-number.success {
+            color: #27ae60;
+        }
+        
+        .stat-number.info {
+            color: #3498db;
+        }
+        
+        .stat-label {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .content-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .panel {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .panel-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        
+        .panel-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .btn {
+            background-color: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.2s;
+        }
+        
+        .btn:hover {
+            background-color: #5a6fd8;
+        }
+        
+        .btn-success {
+            background-color: #27ae60;
+        }
+        
+        .btn-success:hover {
+            background-color: #229954;
+        }
+        
+        .alert-item {
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            border-left: 4px solid;
+            background-color: #f8f9fa;
+        }
+        
+        .alert-critical {
+            border-left-color: #e74c3c;
+            background-color: #fdf2f2;
+        }
+        
+        .alert-high {
+            border-left-color: #f39c12;
+            background-color: #fef9e7;
+        }
+        
+        .alert-medium {
+            border-left-color: #3498db;
+            background-color: #ebf3fd;
+        }
+        
+        .alert-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+        
+        .alert-severity {
+            font-size: 12px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .severity-critical {
+            background-color: #e74c3c;
+        }
+        
+        .severity-high {
+            background-color: #f39c12;
+        }
+        
+        .severity-medium {
+            background-color: #3498db;
+        }
+        
+        .alert-resource {
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .alert-description {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .drift-summary {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .drift-chart {
+            text-align: center;
+        }
+        
+        .chart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .chart-item:last-child {
+            border-bottom: none;
+        }
+        
+        .chart-label {
+            font-weight: 500;
+        }
+        
+        .chart-value {
+            font-weight: bold;
+            padding: 2px 8px;
+            border-radius: 10px;
+            color: white;
+            font-size: 12px;
+        }
+        
+        .no-data {
+            text-align: center;
+            color: #666;
+            padding: 40px;
+        }
+        
+        .auto-refresh {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: white;
+            padding: 10px;
+            border-radius: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .pulse {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #4caf50;
+            animation: pulse 2s infinite;
+            margin-right: 5px;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7);
+            }
+            
+            70% {
+                transform: scale(1);
+                box-shadow: 0 0 0 10px rgba(76, 175, 80, 0);
+            }
+            
+            100% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(76, 175, 80, 0);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">
+                🚨 AWS Terraform Drift Detection
+            </div>
+            <div class="header-info">
+                <span class="status-badge {{ 'status-running' if stats.scanner_status == 'Running' else 'status-stopped' }}">
+                    {{ stats.scanner_status }}
+                </span>
+                <span>{{ 'Demo Mode' if demo_mode else 'Production Mode' }}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Statistics Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number info">{{ stats.total_resources }}</div>
+                <div class="stat-label">Total Resources Monitored</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number {{ 'critical' if stats.drift_detected > 0 else 'success' }}">{{ stats.drift_detected }}</div>
+                <div class="stat-label">Drift Items Detected</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number {{ 'warning' if stats.active_alerts > 0 else 'success' }}">{{ stats.active_alerts }}</div>
+                <div class="stat-label">Active Alerts</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number info">5 min</div>
+                <div class="stat-label">Scan Interval</div>
+            </div>
+        </div>
+
+        <!-- Main Content Grid -->
+        <div class="content-grid">
+            <!-- Latest Scan Results -->
+            <div class="panel">
+                <div class="panel-header">
+                    <h2 class="panel-title">📊 Latest Drift Detection Results</h2>
+                    <button class="btn" onclick="triggerScan()">🔄 Run Scan Now</button>
+                </div>
+                
+                {% if latest_scan %}
+                <div class="scan-info">
+                    <p><strong>Scan ID:</strong> {{ latest_scan.scan_id }}</p>
+                    <p><strong>Timestamp:</strong> {{ latest_scan.timestamp | ist_datetime }}</p>
+                    <p><strong>Mode:</strong> {{ latest_scan.mode }}</p>
+                    <p><strong>Regions Scanned:</strong> {{ latest_scan.aws_resources.regions_scanned | join(', ') }}</p>
+                    <p><strong>Scan Duration:</strong> {{ "%.3f"|format(latest_scan.duration_seconds) }} seconds</p>
+                </div>
+
+                <div class="drift-summary">
+                    <div class="drift-chart">
+                        <h4>📈 Drift by Severity</h4>
+                        {% for severity, count in latest_scan.drift_summary.by_severity.items() %}
+                        <div class="chart-item">
+                            <span class="chart-label">{{ severity }}</span>
+                            <span class="chart-value severity-{{ severity.lower() }}">{{ count }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="drift-chart">
+                        <h4>🔍 Drift by Type</h4>
+                        {% for drift_type, count in latest_scan.drift_summary.by_type.items() %}
+                        <div class="chart-item">
+                            <span class="chart-label">{{ drift_type.title() }}</span>
+                            <span class="chart-value chart-value-info">{{ count }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                {% if latest_scan.drift_items %}
+                <div style="margin-top: 20px;">
+                    <h4>🔍 Detected Drift Items</h4>
+                    {% for item in latest_scan.drift_items[:3] %}
+                    <div class="alert-item alert-{{ item.severity.lower() }}">
+                        <div class="alert-header">
+                            <span class="alert-resource">{{ item.resource_name }}</span>
+                            <span class="alert-severity severity-{{ item.severity.lower() }}">{{ item.severity }}</span>
+                        </div>
+                        <div class="alert-description">
+                            {{ item.resource_type }} - {{ item.drift_type.title() }} drift detected
+                        </div>
+                    </div>
+                    {% endfor %}
+                    
+                    {% if latest_scan.drift_items|length > 3 %}
+                    <p style="text-align: center; margin-top: 10px;">
+                        <a href="/scan-results" class="btn">View All {{ latest_scan.drift_items|length }} Items</a>
+                    </p>
+                    {% endif %}
+                </div>
+                {% endif %}
+
+                {% else %}
+                <div class="no-data">
+                    <p>No scan data available. First scan will start automatically.</p>
+                    <button class="btn btn-success" onclick="triggerScan()">🚀 Start First Scan</button>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Active Alerts -->
+            <div class="panel">
+                <div class="panel-header">
+                    <h2 class="panel-title">🚨 Active Alerts</h2>
+                    <a href="/alerts" class="btn">View All</a>
+                </div>
+
+                {% if active_alerts %}
+                {% for alert in active_alerts %}
+                <div class="alert-item alert-{{ alert.severity.lower() }}">
+                    <div class="alert-header">
+                        <span class="alert-resource">{{ alert.resource.name }}</span>
+                        <span class="alert-severity severity-{{ alert.severity.lower() }}">{{ alert.severity }}</span>
+                    </div>
+                    <div class="alert-description">
+                        {{ alert.drift_details.drift_type.title() }} drift in {{ alert.resource.type }}
+                    </div>
+                    <div style="font-size: 12px; color: #999; margin-top: 5px;">
+                        {{ alert.timestamp | ist_datetime }}
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <div class="no-data">
+                    <p>🎉 No active alerts</p>
+                    <p style="font-size: 14px; color: #666;">All resources are in sync with Terraform state</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- System Information -->
+        <div class="panel">
+            <div class="panel-header">
+                <h2 class="panel-title">⚙️ System Status</h2>
+            </div>
+            
+            <div class="stats-grid">
+                <div>
+                    <strong>Last Scan:</strong><br>
+                    <span style="color: #666;">{{ stats.last_scan | ist_datetime }}</span>
+                </div>
+                <div>
+                    <strong>Next Scan:</strong><br>
+                    <span style="color: #666;">{{ stats.next_scan }}</span>
+                </div>
+                <div>
+                    <strong>Scanner Status:</strong><br>
+                    <span class="status-badge {{ 'status-running' if stats.scanner_status == 'Running' else 'status-stopped' }}">
+                        {{ stats.scanner_status }}
+                    </span>
+                </div>
+                <div>
+                    <strong>Environment:</strong><br>
+                    <span style="color: #666;">{{ 'Demo Mode (No AWS Access Required)' if demo_mode else 'Production Mode (Live AWS Integration)' }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Auto-refresh Indicator -->
+    <div class="auto-refresh">
+        <span class="pulse"></span>
+        Auto-refreshing every 30 seconds
+    </div>
+
+    <script>
+        // Auto-refresh the page every 30 seconds
+        setTimeout(function() {
+            location.reload();
+        }, 30000);
+
+        // Function to trigger manual scan
+        function triggerScan() {
+            const button = event.target;
+            button.disabled = true;
+            button.textContent = 'Scanning...';
+            
+            fetch('/api/trigger-scan', { 
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Cache-Control': 'no-cache'
+                }
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        alert(`Scan triggered successfully! Scan ID: ${data.scan_id}\nPage will refresh in 3 seconds.`);
+                        setTimeout(() => location.reload(), 3000);
+                    } else {
+                        alert('Error triggering scan: ' + (data.error || 'Unknown error'));
+                    }
+                })
+                .catch(error => {
+                    console.error('Scan trigger error:', error);
+                    alert('Error triggering scan: ' + error.message);
+                })
+                .finally(() => {
+                    button.disabled = false;
+                    button.textContent = '🔄 Run Scan Now';
+                });
+        }
+
+        // Load fresh data every 15 seconds for real-time updates
+        setInterval(function() {
+            fetch('/api/latest-scan')
+                .then(response => response.json())
+                .then(data => {
+                    // Update page elements without full refresh
+                    console.log('Updated scan data:', data);
+                });
+        }, 15000);
+    </script>
+</body>
+</html>

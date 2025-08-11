@@ -1,0 +1,60 @@
+{
+  "debug": false,
+  "port": 5000,
+  "host": "0.0.0.0",
+  
+  "_comment_aws": "=== AWS AUTHENTICATION SETTINGS ===",
+  "aws_region": "ap-south-1",
+  "aws_profile": null,
+  "aws_access_key_id": null,
+  "aws_secret_access_key": null,
+  "aws_session_token": null,
+  "aws_assume_role_arn": null,
+  
+  "_comment_terraform": "=== TERRAFORM S3 STATE SETTINGS ===",
+  "terraform_s3_bucket": "terraform-bucket1703",
+  "terraform_s3_key": "terraform.state",
+  "terraform_s3_region": "ap-south-1",
+  
+  "_comment_scanning": "=== SCANNING CONFIGURATION ===",
+  "scan_interval_minutes": 5,
+  "scan_regions": [
+    "ap-south-1"
+  ],
+  "enable_auto_scan": true,
+  "max_scan_history": 100,
+  "max_alert_history": 500,
+  
+  "_comment_alerts": "=== ALERT SETTINGS ===",
+  "enable_email_alerts": false,
+  "email_smtp_server": "smtp.gmail.com",
+  "email_smtp_port": 587,
+  "email_from": "your-app@company.com",
+  "email_to": [
+    "admin@company.com"
+  ],
+  "enable_webhook_alerts": false,
+  "webhook_url": "https://hooks.slack.com/services/YOUR/WEBHOOK/URL",
+  
+  "_comment_detection": "=== DRIFT DETECTION RULES ===",
+  "severity_thresholds": {
+    "CRITICAL": [
+      "missing",
+      "extra"
+    ],
+    "HIGH": [
+      "configuration"
+    ],
+    "MEDIUM": [
+      "tags"
+    ],
+    "LOW": [
+      "metadata"
+    ]
+  },
+  "ignore_tags": [
+    "LastModified",
+    "CreatedBy"
+  ],
+  "ignore_resources": []
+}

@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alert Management - AWS Terraform Drift Detection</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: background-color 0.2s;
+        }
+        
+        .nav-links a:hover {
+            background-color: rgba(255,255,255,0.2);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .panel {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+        }
+        
+        .panel-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .alert-filters {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            padding: 5px 10px;
+            border: 1px solid #ddd;
+            background: white;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+        
+        .filter-btn.active {
+            background-color: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        
+        .alert-item {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            overflow: hidden;
+            transition: box-shadow 0.2s;
+        }
+        
+        .alert-item:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .alert-header {
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+        .alert-critical .alert-header {
+            background-color: #fee;
+            border-left: 4px solid #e74c3c;
+        }
+        
+        .alert-high .alert-header {
+            background-color: #fef9e7;
+            border-left: 4px solid #f39c12;
+        }
+        
+        .alert-medium .alert-header {
+            background-color: #ebf3fd;
+            border-left: 4px solid #3498db;
+        }
+        
+        .alert-low .alert-header {
+            background-color: #eef;
+            border-left: 4px solid #9b59b6;
+        }
+        
+        .alert-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex: 1;
+        }
+        
+        .alert-icon {
+            font-size: 24px;
+        }
+        
+        .alert-content {
+            flex: 1;
+        }
+        
+        .alert-title {
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+        
+        .alert-description {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        
+        .alert-meta {
+            color: #999;
+            font-size: 12px;
+            display: flex;
+            gap: 15px;
+        }
+        
+        .alert-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .severity-badge {
+            padding: 4px 8px;
+            border-radius: 10px;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .severity-critical {
+            background-color: #e74c3c;
+        }
+        
+        .severity-high {
+            background-color: #f39c12;
+        }
+        
+        .severity-medium {
+            background-color: #3498db;
+        }
+        
+        .severity-low {
+            background-color: #9b59b6;
+        }
+        
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+        
+        .status-new {
+            background-color: #e74c3c;
+            color: white;
+        }
+        
+        .status-acknowledged {
+            background-color: #f39c12;
+            color: white;
+        }
+        
+        .status-resolved {
+            background-color: #27ae60;
+            color: white;
+        }
+        
+        .status-suppressed {
+            background-color: #95a5a6;
+            color: white;
+        }
+        
+        .btn {
+            background-color: #667eea;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            text-decoration: none;
+            display: inline-block;
+            transition: background-color 0.2s;
+        }
+        
+        .btn:hover {
+            background-color: #5a6fd8;
+        }
+        
+        .btn-small {
+            padding: 4px 8px;
+            font-size: 11px;
+        }
+        
+        .btn-success {
+            background-color: #27ae60;
+        }
+        
+        .btn-warning {
+            background-color: #f39c12;
+        }
+        
+        .btn-danger {
+            background-color: #e74c3c;
+        }
+        
+        .btn-secondary {
+            background-color: #95a5a6;
+        }
+        
+        .alert-details {
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-top: 1px solid #ddd;
+            display: none;
+        }
+        
+        .alert-details.show {
+            display: block;
+        }
+        
+        .details-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .detail-section {
+            background: white;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        
+        .detail-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .stats-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .no-alerts {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+        
+        .expand-icon {
+            transition: transform 0.2s;
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .expand-icon.rotated {
+            transform: rotate(180deg);
+        }
+        
+        .search-box {
+            width: 200px;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+        
+        @media (max-width: 768px) {
+            .alert-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .alert-actions {
+                align-self: flex-end;
+            }
+            
+            .details-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">
+                🚨 Alert Management Center
+            </div>
+            <div class="nav-links">
+                <a href="/">🏠 Dashboard</a>
+                <a href="/scan-results">🔍 Scan Results</a>
+                <a href="/health">❤️ Health</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Alert Statistics -->
+        <div class="panel">
+            <div class="panel-header">
+                <h2 class="panel-title">📊 Alert Overview</h2>
+            </div>
+            
+            <div class="stats-summary">
+                <div class="stat-card">
+                    <div class="stat-number">{{ alerts | selectattr('status', 'equalto', 'NEW') | list | length }}</div>
+                    <div class="stat-label">New Alerts</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">{{ alerts | selectattr('severity', 'equalto', 'CRITICAL') | list | length }}</div>
+                    <div class="stat-label">Critical</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">{{ alerts | selectattr('severity', 'equalto', 'HIGH') | list | length }}</div>
+                    <div class="stat-label">High Priority</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">{{ alerts | length }}</div>
+                    <div class="stat-label">Total Active</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Alert Management -->
+        <div class="panel">
+            <div class="panel-header">
+                <h2 class="panel-title">🔔 Active Alerts</h2>
+                <div class="alert-filters">
+                    <input type="text" class="search-box" placeholder="🔍 Search alerts..." onkeyup="filterAlerts()">
+                    <button class="filter-btn active" onclick="filterBySeverity('ALL')">All</button>
+                    <button class="filter-btn" onclick="filterBySeverity('CRITICAL')">Critical</button>
+                    <button class="filter-btn" onclick="filterBySeverity('HIGH')">High</button>
+                    <button class="filter-btn" onclick="filterBySeverity('MEDIUM')">Medium</button>
+                    <button class="filter-btn" onclick="filterBySeverity('LOW')">Low</button>
+                </div>
+            </div>
+
+            <div id="alerts-container">
+                {% if alerts %}
+                {% for alert in alerts %}
+                <div class="alert-item alert-{{ alert.severity.lower() }}" data-severity="{{ alert.severity }}" data-status="{{ alert.status }}">
+                    <div class="alert-header" onclick="toggleAlertDetails('alert-{{ loop.index }}')">
+                        <div class="alert-info">
+                            <div class="alert-icon">
+                                {% if alert.resource.type == 'aws_instance' %}🖥️
+                                {% elif alert.resource.type == 'aws_security_group' %}🔒
+                                {% elif alert.resource.type == 'aws_s3_bucket' %}🪣
+                                {% elif alert.resource.type == 'aws_rds_instance' %}🗄️
+                                {% elif alert.resource.type == 'aws_iam_role' %}👤
+                                {% else %}📦
+                                {% endif %}
+                            </div>
+                            <div class="alert-content">
+                                <div class="alert-title">{{ alert.resource.name }}</div>
+                                <div class="alert-description">
+                                    {{ alert.drift_details.drift_type.title() }} drift detected in {{ alert.resource.type }}
+                                </div>
+                                <div class="alert-meta">
+                                    <span>🕒 {{ alert.timestamp }}</span>
+                                    <span>🎯 {{ alert.alert_metadata.environment }}</span>
+                                    <span>📍 {{ alert.resource.terraform_address }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="alert-actions">
+                            <span class="severity-badge severity-{{ alert.severity.lower() }}">{{ alert.severity }}</span>
+                            <span class="status-badge status-{{ alert.status.lower() }}">{{ alert.status }}</span>
+                            <span class="expand-icon" id="icon-alert-{{ loop.index }}">▼</span>
+                        </div>
+                    </div>
+                    
+                    <div class="alert-details" id="details-alert-{{ loop.index }}">
+                        <div class="details-grid">
+                            <div class="detail-section">
+                                <div class="detail-title">📋 Alert Information</div>
+                                <table style="width: 100%; font-size: 14px;">
+                                    <tr style="border-bottom: 1px solid #eee;">
+                                        <td style="padding: 5px; font-weight: bold;">Alert ID:</td>
+                                        <td style="padding: 5px;"><code>{{ alert.alert_id }}</code></td>
+                                    </tr>
+                                    <tr style="border-bottom: 1px solid #eee;">
+                                        <td style="padding: 5px; font-weight: bold;">Scan ID:</td>
+                                        <td style="padding: 5px;"><code>{{ alert.alert_metadata.scan_id }}</code></td>
+                                    </tr>
+                                    <tr style="border-bottom: 1px solid #eee;">
+                                        <td style="padding: 5px; font-weight: bold;">First Detected:</td>
+                                        <td style="padding: 5px;">{{ alert.alert_metadata.first_detected }}</td>
+                                    </tr>
+                                    <tr style="border-bottom: 1px solid #eee;">
+                                        <td style="padding: 5px; font-weight: bold;">Occurrences:</td>
+                                        <td style="padding: 5px;">{{ alert.alert_metadata.occurrence_count }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 5px; font-weight: bold;">AWS Resource ID:</td>
+                                        <td style="padding: 5px;"><code>{{ alert.resource.aws_id }}</code></td>
+                                    </tr>
+                                </table>
+                            </div>
+                            
+                            <div class="detail-section">
+                                <div class="detail-title">⚠️ Drift Details</div>
+                                <div style="font-size: 14px;">
+                                    <p><strong>Drift Type:</strong> {{ alert.drift_details.drift_type.title() }}</p>
+                                    <div style="margin-top: 10px;">
+                                        <strong>Changes Detected:</strong>
+                                        {% for attr, diff in alert.drift_details.differences.items() %}
+                                        <div style="margin: 8px 0; padding: 8px; background-color: #f1f1f1; border-radius: 4px;">
+                                            <strong>{{ attr.replace('_', ' ').title() }}:</strong><br>
+                                            <span style="color: #666; font-size: 12px;">{{ diff.impact if diff.impact else 'Configuration mismatch detected' }}</span>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-top: 20px; text-align: center; padding-top: 15px; border-top: 1px solid #ddd;">
+                            <button class="btn btn-success btn-small" onclick="acknowledgeAlert('{{ alert.alert_id }}')">
+                                ✅ Acknowledge
+                            </button>
+                            <button class="btn btn-warning btn-small" onclick="suppressAlert('{{ alert.alert_id }}')">
+                                🔇 Suppress
+                            </button>
+                            <button class="btn btn-secondary btn-small" onclick="resolveAlert('{{ alert.alert_id }}')">
+                                ✔️ Mark Resolved
+                            </button>
+                            <button class="btn btn-small" onclick="viewInAWS('{{ alert.resource.aws_id }}')">
+                                🔗 View in AWS
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <div class="no-alerts">
+                    <h3>🎉 No Active Alerts</h3>
+                    <p>Great news! All your infrastructure is in sync with Terraform state.</p>
+                    <p style="margin-top: 10px; color: #27ae60;">Your monitoring system is working perfectly! 🚀</p>
+                    <a href="/" class="btn" style="margin-top: 15px;">🏠 Back to Dashboard</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleAlertDetails(alertId) {
+            const details = document.getElementById('details-' + alertId);
+            const icon = document.getElementById('icon-' + alertId);
+            
+            if (details.classList.contains('show')) {
+                details.classList.remove('show');
+                icon.classList.remove('rotated');
+            } else {
+                details.classList.add('show');
+                icon.classList.add('rotated');
+            }
+        }
+
+        function filterBySeverity(severity) {
+            const alerts = document.querySelectorAll('.alert-item');
+            const buttons = document.querySelectorAll('.filter-btn');
+            
+            // Update active button
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Filter alerts
+            alerts.forEach(alert => {
+                if (severity === 'ALL' || alert.dataset.severity === severity) {
+                    alert.style.display = 'block';
+                } else {
+                    alert.style.display = 'none';
+                }
+            });
+        }
+
+        function filterAlerts() {
+            const searchTerm = event.target.value.toLowerCase();
+            const alerts = document.querySelectorAll('.alert-item');
+            
+            alerts.forEach(alert => {
+                const alertText = alert.textContent.toLowerCase();
+                if (alertText.includes(searchTerm)) {
+                    alert.style.display = 'block';
+                } else {
+                    alert.style.display = 'none';
+                }
+            });
+        }
+
+        function acknowledgeAlert(alertId) {
+            // In a real app, this would make an API call
+            alert('Alert ' + alertId + ' has been acknowledged.\n\nIn the production version, this would:\n• Update the alert status\n• Send notifications\n• Log the action');
+        }
+
+        function suppressAlert(alertId) {
+            if (confirm('Are you sure you want to suppress this alert?\n\nThis will prevent future notifications for this specific drift.')) {
+                alert('Alert ' + alertId + ' has been suppressed.\n\nIn the production version, this would:\n• Stop future notifications\n• Add to suppression rules\n• Log the action');
+            }
+        }
+
+        function resolveAlert(alertId) {
+            if (confirm('Mark this alert as resolved?\n\nThis indicates the drift has been fixed.')) {
+                alert('Alert ' + alertId + ' marked as resolved.\n\nIn the production version, this would:\n• Update alert status\n• Remove from active alerts\n• Add to resolution history');
+            }
+        }
+
+        function viewInAWS(resourceId) {
+            alert('Opening AWS Console for resource: ' + resourceId + '\n\nIn the production version, this would:\n• Open AWS Console\n• Navigate to the specific resource\n• Show current configuration');
+        }
+
+        // Auto-refresh alerts every 30 seconds
+        setInterval(function() {
+            // In production, this would fetch new alert data
+            console.log('Checking for new alerts...');
+        }, 30000);
+    </script>
+</body>
+</html>

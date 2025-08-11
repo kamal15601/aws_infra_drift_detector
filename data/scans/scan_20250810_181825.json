@@ -1,0 +1,193 @@
+{
+  "scan_id": "656ba717-662d-45e1-85d5-1f9322cef61d",
+  "timestamp": "2025-08-10T18:18:25.633964",
+  "duration_seconds": 0.010553,
+  "mode": "demo",
+  "terraform_state": {
+    "version": 4,
+    "serial": 123,
+    "resource_count": 3
+  },
+  "aws_resources": {
+    "regions_scanned": [
+      "us-east-1"
+    ],
+    "total_resources": 4
+  },
+  "drift_summary": {
+    "total_drift_items": 4,
+    "by_severity": {
+      "HIGH": 3,
+      "CRITICAL": 1
+    },
+    "by_type": {
+      "configuration": 3,
+      "extra": 1
+    },
+    "by_resource_type": {
+      "aws_instance": 2,
+      "aws_security_group": 1,
+      "aws_s3_bucket": 1
+    }
+  },
+  "alerts_generated": 4,
+  "drift_items": [
+    {
+      "resource_type": "aws_instance",
+      "resource_name": "web_server",
+      "terraform_address": "aws_instance.web_server",
+      "aws_id": "i-1234567890abcdef0",
+      "drift_type": "configuration",
+      "severity": "HIGH",
+      "differences": {
+        "instance_type": {
+          "terraform": "t3.medium",
+          "aws": "t3.large",
+          "impact": "Performance and cost implications"
+        },
+        "tags": {
+          "terraform": {
+            "Name": "web-server-prod",
+            "Environment": "production",
+            "ManagedBy": "terraform"
+          },
+          "aws": {
+            "Name": "web-server-prod",
+            "Environment": "production",
+            "ManagedBy": "terraform",
+            "Owner": "devops-team"
+          },
+          "missing_in_aws": {},
+          "extra_in_aws": {
+            "Owner": "devops-team"
+          },
+          "different_values": {}
+        }
+      },
+      "first_detected": "2025-08-10T18:18:25.635039",
+      "last_seen": "2025-08-10T18:18:25.635075",
+      "environment": "production",
+      "region": "us-east-1"
+    },
+    {
+      "resource_type": "aws_security_group",
+      "resource_name": "web_sg",
+      "terraform_address": "aws_security_group.web_sg",
+      "aws_id": "sg-web-server",
+      "drift_type": "configuration",
+      "severity": "HIGH",
+      "differences": {
+        "ingress_rules": {
+          "terraform": [
+            {
+              "protocol": "tcp",
+              "from_port": 80,
+              "to_port": 80,
+              "cidr_blocks": [
+                "0.0.0.0/0"
+              ]
+            },
+            {
+              "protocol": "tcp",
+              "from_port": 443,
+              "to_port": 443,
+              "cidr_blocks": [
+                "0.0.0.0/0"
+              ]
+            }
+          ],
+          "aws": [
+            {
+              "protocol": "tcp",
+              "from_port": 22,
+              "to_port": 22,
+              "cidr_blocks": [
+                "10.0.0.0/8"
+              ]
+            },
+            {
+              "protocol": "tcp",
+              "from_port": 80,
+              "to_port": 80,
+              "cidr_blocks": [
+                "0.0.0.0/0"
+              ]
+            },
+            {
+              "protocol": "tcp",
+              "from_port": 443,
+              "to_port": 443,
+              "cidr_blocks": [
+                "0.0.0.0/0"
+              ]
+            }
+          ],
+          "impact": "Network security rules differ for ingress"
+        }
+      },
+      "first_detected": "2025-08-10T18:18:25.635098",
+      "last_seen": "2025-08-10T18:18:25.635100",
+      "environment": "production",
+      "region": "us-east-1"
+    },
+    {
+      "resource_type": "aws_s3_bucket",
+      "resource_name": "app_data",
+      "terraform_address": "aws_s3_bucket.app_data",
+      "aws_id": "my-app-data-bucket-prod",
+      "drift_type": "configuration",
+      "severity": "HIGH",
+      "differences": {
+        "encryption": {
+          "terraform": "AES256",
+          "aws": "aws:kms",
+          "impact": "Security and compliance implications"
+        },
+        "tags": {
+          "terraform": {
+            "Name": "app-data-bucket",
+            "Environment": "production",
+            "BackupRetention": "30-days"
+          },
+          "aws": {
+            "Name": "app-data-bucket",
+            "Environment": "production"
+          },
+          "missing_in_aws": {
+            "BackupRetention": "30-days"
+          },
+          "extra_in_aws": {},
+          "different_values": {}
+        }
+      },
+      "first_detected": "2025-08-10T18:18:25.635114",
+      "last_seen": "2025-08-10T18:18:25.635115",
+      "environment": "production",
+      "region": "us-east-1"
+    },
+    {
+      "resource_type": "aws_instance",
+      "resource_name": "manual-test-instance",
+      "terraform_address": "N/A",
+      "aws_id": "i-9876543210fedcba0",
+      "drift_type": "extra",
+      "severity": "CRITICAL",
+      "differences": {
+        "status": "AWS resource exists but not managed by Terraform",
+        "resource_details": {
+          "instance_type": "t3.micro",
+          "state": "running",
+          "tags": {
+            "Name": "manual-test-instance",
+            "Environment": "production",
+            "CreatedBy": "manual"
+          }
+        }
+      },
+      "first_detected": "2025-08-10T18:18:25.635128",
+      "last_seen": "2025-08-10T18:18:25.635129",
+      "environment": "production",
+      "region": "us-east-1"
+    }
+  ]
+}

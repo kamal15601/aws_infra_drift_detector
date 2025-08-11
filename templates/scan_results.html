@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drift Detection Results - Detailed View</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: background-color 0.2s;
+        }
+        
+        .nav-links a:hover {
+            background-color: rgba(255,255,255,0.2);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .panel {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .panel-header {
+            border-bottom: 1px solid #eee;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+        }
+        
+        .panel-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .scan-meta {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .meta-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+        
+        .meta-label {
+            font-weight: 500;
+            color: #666;
+        }
+        
+        .meta-value {
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .drift-item {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        
+        .drift-header {
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .drift-header:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .drift-critical .drift-header {
+            background-color: #fee;
+            border-left: 4px solid #e74c3c;
+        }
+        
+        .drift-high .drift-header {
+            background-color: #fef9e7;
+            border-left: 4px solid #f39c12;
+        }
+        
+        .drift-medium .drift-header {
+            background-color: #ebf3fd;
+            border-left: 4px solid #3498db;
+        }
+        
+        .drift-low .drift-header {
+            background-color: #eef;
+            border-left: 4px solid #9b59b6;
+        }
+        
+        .drift-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .resource-icon {
+            font-size: 20px;
+        }
+        
+        .resource-name {
+            font-weight: bold;
+            font-size: 16px;
+        }
+        
+        .resource-type {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .severity-badge {
+            padding: 4px 8px;
+            border-radius: 10px;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .severity-critical {
+            background-color: #e74c3c;
+        }
+        
+        .severity-high {
+            background-color: #f39c12;
+        }
+        
+        .severity-medium {
+            background-color: #3498db;
+        }
+        
+        .severity-low {
+            background-color: #9b59b6;
+        }
+        
+        .drift-details {
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-top: 1px solid #ddd;
+            display: none;
+        }
+        
+        .drift-details.show {
+            display: block;
+        }
+        
+        .details-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .detail-section {
+            background: white;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        
+        .detail-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .diff-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .diff-table th,
+        .diff-table td {
+            text-align: left;
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .diff-table th {
+            background-color: #f1f1f1;
+            font-weight: bold;
+        }
+        
+        .terraform-value {
+            background-color: #e8f5e8;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+        
+        .aws-value {
+            background-color: #ffe8e8;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+        
+        .impact-note {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        
+        .no-drift {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+        
+        .expand-icon {
+            transition: transform 0.2s;
+        }
+        
+        .expand-icon.rotated {
+            transform: rotate(180deg);
+        }
+        
+        .btn {
+            background-color: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            text-decoration: none;
+            display: inline-block;
+            margin: 5px;
+            transition: background-color 0.2s;
+        }
+        
+        .btn:hover {
+            background-color: #5a6fd8;
+        }
+        
+        .btn-success {
+            background-color: #27ae60;
+        }
+        
+        .btn-warning {
+            background-color: #f39c12;
+        }
+        
+        .summary-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-box {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">
+                🔍 Detailed Drift Analysis
+            </div>
+            <div class="nav-links">
+                <a href="/">🏠 Dashboard</a>
+                <a href="/alerts">🚨 Alerts</a>
+                <a href="/health">❤️ Health</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        {% if scan_data %}
+        <!-- Scan Summary -->
+        <div class="panel">
+            <div class="panel-header">
+                <h2 class="panel-title">📊 Scan Summary</h2>
+            </div>
+            
+            <div class="summary-stats">
+                <div class="stat-box">
+                    <div class="stat-number">{{ scan_data.drift_summary.total_resources_checked }}</div>
+                    <div class="stat-label">Resources Checked</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">{{ scan_data.drift_summary.drift_detected }}</div>
+                    <div class="stat-label">Drift Items Found</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">{{ "%.1f"|format(scan_data.aws_scan.scan_duration_seconds) }}s</div>
+                    <div class="stat-label">Scan Duration</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">{{ scan_data.aws_scan.regions_scanned | length }}</div>
+                    <div class="stat-label">Regions Scanned</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scan Metadata -->
+        <div class="panel">
+            <div class="panel-header">
+                <h2 class="panel-title">🔧 Scan Details</h2>
+            </div>
+            
+            <div class="scan-meta">
+                <div class="meta-item">
+                    <span class="meta-label">Scan ID:</span>
+                    <span class="meta-value">{{ scan_data.scan_id }}</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Timestamp:</span>
+                    <span class="meta-value">{{ scan_data.timestamp }}</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">State Source:</span>
+                    <span class="meta-value">{{ scan_data.terraform_state.source }}</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">State Version:</span>
+                    <span class="meta-value">v{{ scan_data.terraform_state.version }}</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Regions:</span>
+                    <span class="meta-value">{{ scan_data.aws_scan.regions_scanned | join(', ') }}</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Resources Found:</span>
+                    <span class="meta-value">{{ scan_data.aws_scan.resources_found }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Drift Items -->
+        <div class="panel">
+            <div class="panel-header">
+                <h2 class="panel-title">🚨 Detected Drift Items</h2>
+            </div>
+
+            {% if scan_data.drift_items %}
+            {% for item in scan_data.drift_items %}
+            <div class="drift-item drift-{{ item.severity.lower() }}">
+                <div class="drift-header" onclick="toggleDetails('drift-{{ loop.index }}')">
+                    <div class="drift-title">
+                        <span class="resource-icon">
+                            {% if item.resource_type == 'aws_instance' %}🖥️
+                            {% elif item.resource_type == 'aws_security_group' %}🔒
+                            {% elif item.resource_type == 'aws_s3_bucket' %}🪣
+                            {% elif item.resource_type == 'aws_rds_instance' %}🗄️
+                            {% elif item.resource_type == 'aws_iam_role' %}👤
+                            {% else %}📦
+                            {% endif %}
+                        </span>
+                        <div>
+                            <div class="resource-name">{{ item.resource_name }}</div>
+                            <div class="resource-type">{{ item.resource_type }}</div>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <span class="severity-badge severity-{{ item.severity.lower() }}">
+                            {{ item.severity }}
+                        </span>
+                        <span class="expand-icon" id="icon-drift-{{ loop.index }}">▼</span>
+                    </div>
+                </div>
+                
+                <div class="drift-details" id="details-drift-{{ loop.index }}">
+                    <div class="details-grid">
+                        <div class="detail-section">
+                            <div class="detail-title">📋 Resource Information</div>
+                            <table class="diff-table">
+                                <tr>
+                                    <th>Property</th>
+                                    <th>Value</th>
+                                </tr>
+                                <tr>
+                                    <td>Terraform Address</td>
+                                    <td><code>{{ item.terraform_address }}</code></td>
+                                </tr>
+                                <tr>
+                                    <td>AWS Resource ID</td>
+                                    <td><code>{{ item.aws_id }}</code></td>
+                                </tr>
+                                <tr>
+                                    <td>Drift Type</td>
+                                    <td><strong>{{ item.drift_type.title() }}</strong></td>
+                                </tr>
+                                <tr>
+                                    <td>Environment</td>
+                                    <td>{{ item.environment }}</td>
+                                </tr>
+                                <tr>
+                                    <td>First Detected</td>
+                                    <td>{{ item.first_detected }}</td>
+                                </tr>
+                            </table>
+                        </div>
+                        
+                        <div class="detail-section">
+                            <div class="detail-title">⚠️ Detected Differences</div>
+                            {% for attr, diff in item.differences.items() %}
+                            <div style="margin-bottom: 15px;">
+                                <strong>{{ attr.replace('_', ' ').title() }}:</strong>
+                                <table class="diff-table" style="margin-top: 5px;">
+                                    <tr>
+                                        <th>Source</th>
+                                        <th>Value</th>
+                                    </tr>
+                                    <tr>
+                                        <td>Terraform</td>
+                                        <td><span class="terraform-value">{{ diff.terraform }}</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>AWS</td>
+                                        <td><span class="aws-value">{{ diff.aws }}</span></td>
+                                    </tr>
+                                </table>
+                                {% if diff.impact %}
+                                <div class="impact-note">
+                                    <strong>Impact:</strong> {{ diff.impact }}
+                                </div>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 20px; text-align: center;">
+                        <button class="btn btn-warning">🔧 Suggest Fix</button>
+                        <button class="btn btn-success">✅ Mark as Expected</button>
+                        <button class="btn">📋 Copy to Clipboard</button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="no-drift">
+                <h3>🎉 No Drift Detected!</h3>
+                <p>All resources are perfectly aligned with your Terraform state.</p>
+                <p style="margin-top: 10px; color: #27ae60;">Your infrastructure is in perfect sync! 🚀</p>
+            </div>
+            {% endif %}
+        </div>
+
+        {% else %}
+        <div class="panel">
+            <div class="no-drift">
+                <h3>📊 No Scan Data Available</h3>
+                <p>No scan results found. Please run a drift detection scan first.</p>
+                <a href="/" class="btn btn-success">🏠 Return to Dashboard</a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <script>
+        function toggleDetails(elementId) {
+            const details = document.getElementById('details-' + elementId);
+            const icon = document.getElementById('icon-' + elementId);
+            
+            if (details.classList.contains('show')) {
+                details.classList.remove('show');
+                icon.classList.remove('rotated');
+            } else {
+                details.classList.add('show');
+                icon.classList.add('rotated');
+            }
+        }
+
+        // Auto-expand first drift item if there are any
+        document.addEventListener('DOMContentLoaded', function() {
+            const firstDriftItem = document.querySelector('.drift-details');
+            if (firstDriftItem) {
+                firstDriftItem.classList.add('show');
+                const firstIcon = document.querySelector('.expand-icon');
+                if (firstIcon) {
+                    firstIcon.classList.add('rotated');
+                }
+            }
+        });
+    </script>
+</body>
+</html>

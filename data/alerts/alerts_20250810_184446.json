@@ -1,0 +1,35 @@
+[
+  {
+    "alert_id": "7e9bbcc5-312c-40fd-b40c-659e9807c2ed",
+    "timestamp": "2025-08-10T18:44:46.512852",
+    "severity": "CRITICAL",
+    "status": "NEW",
+    "resource": {
+      "type": "aws_instance",
+      "name": "test-server",
+      "terraform_address": "N/A",
+      "aws_id": "i-0d6d22658c57722b4",
+      "region": "ap-south-1"
+    },
+    "drift_details": {
+      "drift_type": "extra",
+      "differences": {
+        "status": "AWS resource exists but not managed by Terraform",
+        "resource_details": {
+          "instance_type": "t2.micro",
+          "state": "running",
+          "tags": {
+            "Name": "test-server"
+          }
+        }
+      },
+      "first_detected": "2025-08-10T18:44:46.512472",
+      "last_seen": "2025-08-10T18:44:46.512492"
+    },
+    "alert_metadata": {
+      "environment": "production",
+      "scan_id": "35d1ac58-db70-41ca-808f-7d6a4702142f",
+      "created_by": "drift-detection-system"
+    }
+  }
+]

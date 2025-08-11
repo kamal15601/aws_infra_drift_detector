@@ -1,0 +1,54 @@
+{
+  "scan_id": "e0f5e8a2-f231-440e-828b-54aeb5ff5bd3",
+  "timestamp": "2025-08-10T18:57:46.124272",
+  "duration_seconds": 7.471664,
+  "mode": "production",
+  "terraform_state": {
+    "version": 4,
+    "serial": 2,
+    "resource_count": 0
+  },
+  "aws_resources": {
+    "regions_scanned": [
+      "ap-south-1"
+    ],
+    "total_resources": 11
+  },
+  "drift_summary": {
+    "total_drift_items": 1,
+    "by_severity": {
+      "CRITICAL": 1
+    },
+    "by_type": {
+      "extra": 1
+    },
+    "by_resource_type": {
+      "aws_instance": 1
+    }
+  },
+  "alerts_generated": 1,
+  "drift_items": [
+    {
+      "resource_type": "aws_instance",
+      "resource_name": "test-server",
+      "terraform_address": "N/A",
+      "aws_id": "i-0d6d22658c57722b4",
+      "drift_type": "extra",
+      "severity": "CRITICAL",
+      "differences": {
+        "status": "AWS resource exists but not managed by Terraform",
+        "resource_details": {
+          "instance_type": "t2.micro",
+          "state": "running",
+          "tags": {
+            "Name": "test-server"
+          }
+        }
+      },
+      "first_detected": "2025-08-10T18:57:53.587050",
+      "last_seen": "2025-08-10T18:57:53.587060",
+      "environment": "production",
+      "region": "ap-south-1"
+    }
+  ]
+}

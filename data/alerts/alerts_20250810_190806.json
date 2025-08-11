@@ -1,0 +1,68 @@
+[
+  {
+    "alert_id": "b56673d6-c711-450d-8bb0-145d290556a3",
+    "timestamp": "2025-08-10T19:08:06.396193",
+    "severity": "CRITICAL",
+    "status": "NEW",
+    "resource": {
+      "type": "aws_instance",
+      "name": "test-server",
+      "terraform_address": "N/A",
+      "aws_id": "i-0d6d22658c57722b4",
+      "region": "ap-south-1"
+    },
+    "drift_details": {
+      "drift_type": "extra",
+      "differences": {
+        "status": "AWS resource exists but not managed by Terraform",
+        "resource_details": {
+          "instance_type": "t2.micro",
+          "state": "running",
+          "tags": {
+            "Name": "test-server"
+          }
+        }
+      },
+      "first_detected": "2025-08-10T19:08:06.395959",
+      "last_seen": "2025-08-10T19:08:06.395971"
+    },
+    "alert_metadata": {
+      "environment": "production",
+      "scan_id": "1495fb1c-3f72-4ae8-9e49-bd962fb2db71",
+      "created_by": "drift-detection-system"
+    }
+  },
+  {
+    "alert_id": "30161c8f-4cc4-4a04-972a-4456aff14efc",
+    "timestamp": "2025-08-10T19:08:06.396209",
+    "severity": "CRITICAL",
+    "status": "NEW",
+    "resource": {
+      "type": "aws_instance",
+      "name": "aws-server",
+      "terraform_address": "N/A",
+      "aws_id": "i-053d69c7684bcc2e8",
+      "region": "ap-south-1"
+    },
+    "drift_details": {
+      "drift_type": "extra",
+      "differences": {
+        "status": "AWS resource exists but not managed by Terraform",
+        "resource_details": {
+          "instance_type": "t2.micro",
+          "state": "running",
+          "tags": {
+            "Name": "aws-server"
+          }
+        }
+      },
+      "first_detected": "2025-08-10T19:08:06.395984",
+      "last_seen": "2025-08-10T19:08:06.395986"
+    },
+    "alert_metadata": {
+      "environment": "production",
+      "scan_id": "1495fb1c-3f72-4ae8-9e49-bd962fb2db71",
+      "created_by": "drift-detection-system"
+    }
+  }
+]

@@ -1,0 +1,203 @@
+[
+  {
+    "alert_id": "8dff27b6-3576-4961-bf1c-5c18c6c04a92",
+    "timestamp": "2025-08-10T17:38:25.437105",
+    "severity": "HIGH",
+    "status": "NEW",
+    "resource": {
+      "type": "aws_instance",
+      "name": "web_server",
+      "terraform_address": "aws_instance.web_server",
+      "aws_id": "i-1234567890abcdef0",
+      "region": "us-east-1"
+    },
+    "drift_details": {
+      "drift_type": "configuration",
+      "differences": {
+        "instance_type": {
+          "terraform": "t3.medium",
+          "aws": "t3.large",
+          "impact": "Performance and cost implications"
+        },
+        "tags": {
+          "terraform": {
+            "Name": "web-server-prod",
+            "Environment": "production",
+            "ManagedBy": "terraform"
+          },
+          "aws": {
+            "Name": "web-server-prod",
+            "Environment": "production",
+            "ManagedBy": "terraform",
+            "Owner": "devops-team"
+          },
+          "missing_in_aws": {},
+          "extra_in_aws": {
+            "Owner": "devops-team"
+          },
+          "different_values": {}
+        }
+      },
+      "first_detected": "2025-08-10T17:38:25.436669",
+      "last_seen": "2025-08-10T17:38:25.436681"
+    },
+    "alert_metadata": {
+      "environment": "production",
+      "scan_id": "8354c5d2-91a1-405a-8f81-3cd76e7fce96",
+      "created_by": "drift-detection-system"
+    }
+  },
+  {
+    "alert_id": "4acf17b9-b14b-49fd-a55f-211caee2fc18",
+    "timestamp": "2025-08-10T17:38:25.437127",
+    "severity": "HIGH",
+    "status": "NEW",
+    "resource": {
+      "type": "aws_security_group",
+      "name": "web_sg",
+      "terraform_address": "aws_security_group.web_sg",
+      "aws_id": "sg-web-server",
+      "region": "us-east-1"
+    },
+    "drift_details": {
+      "drift_type": "configuration",
+      "differences": {
+        "ingress_rules": {
+          "terraform": [
+            {
+              "protocol": "tcp",
+              "from_port": 80,
+              "to_port": 80,
+              "cidr_blocks": [
+                "0.0.0.0/0"
+              ]
+            },
+            {
+              "protocol": "tcp",
+              "from_port": 443,
+              "to_port": 443,
+              "cidr_blocks": [
+                "0.0.0.0/0"
+              ]
+            }
+          ],
+          "aws": [
+            {
+              "protocol": "tcp",
+              "from_port": 22,
+              "to_port": 22,
+              "cidr_blocks": [
+                "10.0.0.0/8"
+              ]
+            },
+            {
+              "protocol": "tcp",
+              "from_port": 80,
+              "to_port": 80,
+              "cidr_blocks": [
+                "0.0.0.0/0"
+              ]
+            },
+            {
+              "protocol": "tcp",
+              "from_port": 443,
+              "to_port": 443,
+              "cidr_blocks": [
+                "0.0.0.0/0"
+              ]
+            }
+          ],
+          "impact": "Network security rules differ for ingress"
+        }
+      },
+      "first_detected": "2025-08-10T17:38:25.436745",
+      "last_seen": "2025-08-10T17:38:25.436750"
+    },
+    "alert_metadata": {
+      "environment": "production",
+      "scan_id": "8354c5d2-91a1-405a-8f81-3cd76e7fce96",
+      "created_by": "drift-detection-system"
+    }
+  },
+  {
+    "alert_id": "c5ce6618-73d8-46dd-8d75-b12961f13a0e",
+    "timestamp": "2025-08-10T17:38:25.437136",
+    "severity": "HIGH",
+    "status": "NEW",
+    "resource": {
+      "type": "aws_s3_bucket",
+      "name": "app_data",
+      "terraform_address": "aws_s3_bucket.app_data",
+      "aws_id": "my-app-data-bucket-prod",
+      "region": "us-east-1"
+    },
+    "drift_details": {
+      "drift_type": "configuration",
+      "differences": {
+        "encryption": {
+          "terraform": "AES256",
+          "aws": "aws:kms",
+          "impact": "Security and compliance implications"
+        },
+        "tags": {
+          "terraform": {
+            "Name": "app-data-bucket",
+            "Environment": "production",
+            "BackupRetention": "30-days"
+          },
+          "aws": {
+            "Name": "app-data-bucket",
+            "Environment": "production"
+          },
+          "missing_in_aws": {
+            "BackupRetention": "30-days"
+          },
+          "extra_in_aws": {},
+          "different_values": {}
+        }
+      },
+      "first_detected": "2025-08-10T17:38:25.436779",
+      "last_seen": "2025-08-10T17:38:25.436782"
+    },
+    "alert_metadata": {
+      "environment": "production",
+      "scan_id": "8354c5d2-91a1-405a-8f81-3cd76e7fce96",
+      "created_by": "drift-detection-system"
+    }
+  },
+  {
+    "alert_id": "3a7ea5e5-b497-46a6-9c4c-70535f40cdb6",
+    "timestamp": "2025-08-10T17:38:25.437143",
+    "severity": "CRITICAL",
+    "status": "NEW",
+    "resource": {
+      "type": "aws_instance",
+      "name": "manual-test-instance",
+      "terraform_address": "N/A",
+      "aws_id": "i-9876543210fedcba0",
+      "region": "us-east-1"
+    },
+    "drift_details": {
+      "drift_type": "extra",
+      "differences": {
+        "status": "AWS resource exists but not managed by Terraform",
+        "resource_details": {
+          "instance_type": "t3.micro",
+          "state": "running",
+          "tags": {
+            "Name": "manual-test-instance",
+            "Environment": "production",
+            "CreatedBy": "manual"
+          }
+        }
+      },
+      "first_detected": "2025-08-10T17:38:25.436813",
+      "last_seen": "2025-08-10T17:38:25.436816"
+    },
+    "alert_metadata": {
+      "environment": "production",
+      "scan_id": "8354c5d2-91a1-405a-8f81-3cd76e7fce96",
+      "created_by": "drift-detection-system"
+    }
+  }
+]

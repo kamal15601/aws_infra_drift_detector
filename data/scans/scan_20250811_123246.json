@@ -1,0 +1,25 @@
+{
+  "scan_id": "7755f636-d028-4440-8ea4-0a6cdb34eac1",
+  "timestamp": "2025-08-11T12:32:25.861437",
+  "duration_seconds": 21.089968,
+  "mode": "production",
+  "terraform_state": {
+    "version": 4,
+    "serial": 2,
+    "resource_count": 0
+  },
+  "aws_resources": {
+    "regions_scanned": [
+      "ap-south-1"
+    ],
+    "total_resources": 11
+  },
+  "drift_summary": {
+    "total_drift_items": 0,
+    "by_severity": {},
+    "by_type": {},
+    "by_resource_type": {}
+  },
+  "alerts_generated": 0,
+  "drift_items": []
+}
