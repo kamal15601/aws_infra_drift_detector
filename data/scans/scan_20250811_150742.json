@@ -1,7 +1,7 @@
 {
-  "scan_id": "2c017d58-a56e-43d9-a4fa-6ea310f8265d",
-  "timestamp": "2025-08-11T16:14:26.949473",
-  "duration_seconds": 9.815745,
+  "scan_id": "ace2532d-4972-4357-bad0-1c101599a47a",
+  "timestamp": "2025-08-11T15:07:33.412256",
+  "duration_seconds": 9.276563,
   "mode": "production",
   "terraform_state": {
     "version": 4,
