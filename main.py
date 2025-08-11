@@ -1,5 +1,5 @@
 """
-AWS Terraform Drift Detection Web Application
+AWS Terraform Drift Detection Web Application.
 Enhanced Version with Real AWS Integration + Demo Mode
 
 This application provides:
