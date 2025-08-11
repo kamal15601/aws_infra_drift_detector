@@ -31,7 +31,7 @@ python-dateutil==2.8.2
 PyYAML==6.0.1
 
 # Cryptography for secure operations
-cryptography==41.0.8
+cryptography==41.0.7
 
 # For production deployment
 gunicorn==21.2.0
