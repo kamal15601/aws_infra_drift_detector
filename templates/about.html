@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - AWS Drift Detection WebApp</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f7fa; }
+        .container { max-width: 800px; margin: 40px auto; background: white; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); padding: 30px; }
+        h1 { color: #667eea; margin-bottom: 20px; }
+        h2 { color: #764ba2; margin-top: 30px; }
+        ul { margin-left: 20px; }
+        .section { margin-bottom: 30px; }
+        .note { color: #e74c3c; font-size: 13px; margin-top: 20px; }
+        footer { margin-top:40px;text-align:center;color:#999;font-size:13px;padding:20px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>About AWS Infrastructure Drift Detection WebApp</h1>
+        <div class="section">
+            <strong>Overview:</strong>
+            <p>This web application helps you monitor and detect configuration drift in your AWS infrastructure by comparing live AWS resources with your Terraform state. It provides real-time alerts, scan history, and a user-friendly dashboard for cloud operations and DevOps teams.</p>
+        </div>
+        <div class="section">
+            <strong>Features:</strong>
+            <ul>
+                <li>Real-time AWS drift detection</li>
+                <li>Dashboard with scan results and alert statistics</li>
+                <li>View all active alerts with filtering and search</li>
+                <li>Export alerts as CSV</li>
+                <li>Acknowledge, suppress, and resolve alerts</li>
+                <li>Settings page to securely configure AWS credentials</li>
+                <li>Health check endpoint</li>
+                <li>Responsive, modern UI with notifications and error handling</li>
+            </ul>
+        </div>
+        <div class="section">
+            <strong>How to Use:</strong>
+            <ul>
+                <li><b>Dashboard:</b> View drift detection status and scan history.</li>
+                <li><b>Alerts:</b> See all active alerts, filter by severity, search, and take actions.</li>
+                <li><b>Export:</b> Download all alerts as CSV for reporting or analysis.</li>
+                <li><b>Settings:</b> Update AWS credentials anytime.</li>
+                <li><b>Health:</b> Check app status and integration.</li>
+            </ul>
+        </div>
+        <div class="section">
+            <strong>How to Configure AWS Credentials:</strong>
+            <ul>
+                <li>Click the <b>Settings</b> button in the navigation bar.</li>
+                <li>Enter your AWS Access Key ID, Secret Access Key, and Region.</li>
+                <li>Click <b>Save Settings</b>. Credentials are securely stored in <code>config.json</code>.</li>
+            </ul>
+        </div>
+        <div class="section">
+            <strong>Security Notes:</strong>
+            <ul>
+                <li>AWS credentials are stored locally in <code>config.json</code> and used only for scanning.</li>
+                <li>Never share your credentials. Use IAM roles and least privilege for production.</li>
+            </ul>
+        </div>
+        <div class="section">
+            <strong>Troubleshooting:</strong>
+            <ul>
+                <li>If alerts do not show, check your AWS credentials and scan history.</li>
+                <li>For deployment issues, verify Python version and dependencies.</li>
+                <li>For API errors, check network and AWS permissions.</li>
+            </ul>
+        </div>
+        <div class="note">
+            For support or feature requests, open an issue on GitHub or contact the maintainer.
+        </div>
+    </div>
+    <footer>
+        AWS Drift Detection App &copy; 2025 | Version 1.0
+    </footer>
+</body>
+</html>

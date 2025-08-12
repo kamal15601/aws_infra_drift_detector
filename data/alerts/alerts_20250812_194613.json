@@ -1,44 +1,18 @@
-{
-  "scan_id": "b83451f6-2032-4846-b382-1e9aa01d8201",
-  "timestamp": "2025-08-12T19:48:04.096632",
-  "duration_seconds": 0.008636,
-  "mode": "demo",
-  "terraform_state": {
-    "version": 4,
-    "serial": 123,
-    "resource_count": 3
-  },
-  "aws_resources": {
-    "regions_scanned": [
-      "us-east-1"
-    ],
-    "total_resources": 4
-  },
-  "drift_summary": {
-    "total_drift_items": 4,
-    "by_severity": {
-      "HIGH": 3,
-      "CRITICAL": 1
-    },
-    "by_type": {
-      "configuration": 3,
-      "extra": 1
-    },
-    "by_resource_type": {
-      "aws_instance": 2,
-      "aws_security_group": 1,
-      "aws_s3_bucket": 1
-    }
-  },
-  "alerts_generated": 4,
-  "drift_items": [
-    {
-      "resource_type": "aws_instance",
-      "resource_name": "web_server",
+[
+  {
+    "alert_id": "1f29fe59-08a1-48e8-a3d2-aaf21dad4a0c",
+    "timestamp": "2025-08-12T19:46:13.737516",
+    "severity": "HIGH",
+    "status": "NEW",
+    "resource": {
+      "type": "aws_instance",
+      "name": "web_server",
       "terraform_address": "aws_instance.web_server",
       "aws_id": "i-1234567890abcdef0",
+      "region": "us-east-1"
+    },
+    "drift_details": {
       "drift_type": "configuration",
-      "severity": "HIGH",
       "differences": {
         "instance_type": {
           "terraform": "t3.medium",
@@ -64,18 +38,29 @@
           "different_values": {}
         }
       },
-      "first_detected": "2025-08-12T19:48:04.097548",
-      "last_seen": "2025-08-12T19:48:04.097553",
-      "environment": "production",
-      "region": "us-east-1"
+      "first_detected": "2025-08-12T19:46:13.737282",
+      "last_seen": "2025-08-12T19:46:13.737289"
     },
-    {
-      "resource_type": "aws_security_group",
-      "resource_name": "web_sg",
+    "alert_metadata": {
+      "environment": "production",
+      "scan_id": "3bf07e8e-3221-4cde-9d19-4a769d4a187a",
+      "created_by": "drift-detection-system"
+    }
+  },
+  {
+    "alert_id": "34b01d97-719a-436b-8de9-ce1d2a9ab07e",
+    "timestamp": "2025-08-12T19:46:13.737527",
+    "severity": "HIGH",
+    "status": "NEW",
+    "resource": {
+      "type": "aws_security_group",
+      "name": "web_sg",
       "terraform_address": "aws_security_group.web_sg",
       "aws_id": "sg-web-server",
+      "region": "us-east-1"
+    },
+    "drift_details": {
       "drift_type": "configuration",
-      "severity": "HIGH",
       "differences": {
         "ingress_rules": {
           "terraform": [
@@ -125,18 +110,29 @@
           "impact": "Network security rules differ for ingress"
         }
       },
-      "first_detected": "2025-08-12T19:48:04.097581",
-      "last_seen": "2025-08-12T19:48:04.097582",
-      "environment": "production",
-      "region": "us-east-1"
+      "first_detected": "2025-08-12T19:46:13.737315",
+      "last_seen": "2025-08-12T19:46:13.737318"
     },
-    {
-      "resource_type": "aws_s3_bucket",
-      "resource_name": "app_data",
+    "alert_metadata": {
+      "environment": "production",
+      "scan_id": "3bf07e8e-3221-4cde-9d19-4a769d4a187a",
+      "created_by": "drift-detection-system"
+    }
+  },
+  {
+    "alert_id": "2dc6f665-cac1-4a75-a885-7a6ca41d2625",
+    "timestamp": "2025-08-12T19:46:13.737532",
+    "severity": "HIGH",
+    "status": "NEW",
+    "resource": {
+      "type": "aws_s3_bucket",
+      "name": "app_data",
       "terraform_address": "aws_s3_bucket.app_data",
       "aws_id": "my-app-data-bucket-prod",
+      "region": "us-east-1"
+    },
+    "drift_details": {
       "drift_type": "configuration",
-      "severity": "HIGH",
       "differences": {
         "encryption": {
           "terraform": "AES256",
@@ -160,18 +156,29 @@
           "different_values": {}
         }
       },
-      "first_detected": "2025-08-12T19:48:04.097595",
-      "last_seen": "2025-08-12T19:48:04.097596",
-      "environment": "production",
-      "region": "us-east-1"
+      "first_detected": "2025-08-12T19:46:13.737332",
+      "last_seen": "2025-08-12T19:46:13.737334"
     },
-    {
-      "resource_type": "aws_instance",
-      "resource_name": "manual-test-instance",
+    "alert_metadata": {
+      "environment": "production",
+      "scan_id": "3bf07e8e-3221-4cde-9d19-4a769d4a187a",
+      "created_by": "drift-detection-system"
+    }
+  },
+  {
+    "alert_id": "8d448acf-7cc3-4c39-93f2-07f4f0045b3e",
+    "timestamp": "2025-08-12T19:46:13.737536",
+    "severity": "CRITICAL",
+    "status": "NEW",
+    "resource": {
+      "type": "aws_instance",
+      "name": "manual-test-instance",
       "terraform_address": "N/A",
       "aws_id": "i-9876543210fedcba0",
+      "region": "us-east-1"
+    },
+    "drift_details": {
       "drift_type": "extra",
-      "severity": "CRITICAL",
       "differences": {
         "status": "AWS resource exists but not managed by Terraform",
         "resource_details": {
@@ -184,10 +191,13 @@
           }
         }
       },
-      "first_detected": "2025-08-12T19:48:04.097611",
-      "last_seen": "2025-08-12T19:48:04.097612",
+      "first_detected": "2025-08-12T19:46:13.737351",
+      "last_seen": "2025-08-12T19:46:13.737353"
+    },
+    "alert_metadata": {
       "environment": "production",
-      "region": "us-east-1"
+      "scan_id": "3bf07e8e-3221-4cde-9d19-4a769d4a187a",
+      "created_by": "drift-detection-system"
     }
-  ]
-}
+  }
+]

@@ -1,7 +1,7 @@
 {
-  "scan_id": "b83451f6-2032-4846-b382-1e9aa01d8201",
-  "timestamp": "2025-08-12T19:48:04.096632",
-  "duration_seconds": 0.008636,
+  "scan_id": "1a936a66-ae39-4733-ae2c-a07b43224827",
+  "timestamp": "2025-08-12T19:38:04.052475",
+  "duration_seconds": 0.011362,
   "mode": "demo",
   "terraform_state": {
     "version": 4,
@@ -64,8 +64,8 @@
           "different_values": {}
         }
       },
-      "first_detected": "2025-08-12T19:48:04.097548",
-      "last_seen": "2025-08-12T19:48:04.097553",
+      "first_detected": "2025-08-12T19:38:04.054745",
+      "last_seen": "2025-08-12T19:38:04.054772",
       "environment": "production",
       "region": "us-east-1"
     },
@@ -125,8 +125,8 @@
           "impact": "Network security rules differ for ingress"
         }
       },
-      "first_detected": "2025-08-12T19:48:04.097581",
-      "last_seen": "2025-08-12T19:48:04.097582",
+      "first_detected": "2025-08-12T19:38:04.054846",
+      "last_seen": "2025-08-12T19:38:04.054849",
       "environment": "production",
       "region": "us-east-1"
     },
@@ -160,8 +160,8 @@
           "different_values": {}
         }
       },
-      "first_detected": "2025-08-12T19:48:04.097595",
-      "last_seen": "2025-08-12T19:48:04.097596",
+      "first_detected": "2025-08-12T19:38:04.054887",
+      "last_seen": "2025-08-12T19:38:04.054891",
       "environment": "production",
       "region": "us-east-1"
     },
@@ -184,8 +184,8 @@
           }
         }
       },
-      "first_detected": "2025-08-12T19:48:04.097611",
-      "last_seen": "2025-08-12T19:48:04.097612",
+      "first_detected": "2025-08-12T19:38:04.054938",
+      "last_seen": "2025-08-12T19:38:04.054941",
       "environment": "production",
       "region": "us-east-1"
     }

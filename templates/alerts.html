@@ -362,6 +362,11 @@
                 grid-template-columns: 1fr;
             }
         }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
@@ -374,6 +379,8 @@
                 <a href="/">🏠 Dashboard</a>
                 <a href="/scan-results">🔍 Scan Results</a>
                 <a href="/health">❤️ Health</a>
+                <a href="/settings">⚙️ Settings</a>
+                <a href="/about">ℹ️ About</a>
             </div>
         </div>
     </div>
@@ -383,6 +390,7 @@
         <div class="panel">
             <div class="panel-header">
                 <h2 class="panel-title">📊 Alert Overview</h2>
+                <button class="btn" onclick="exportAlerts()">⬇️ Export Alerts (CSV)</button>
             </div>
             
             <div class="stats-summary">
@@ -527,6 +535,12 @@
         </div>
     </div>
 
+    <div id="notification" style="position:fixed;top:20px;right:20px;z-index:9999;min-width:200px;max-width:400px;padding:12px 20px;background:#fff;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,0.15);color:#333;display:none;font-weight:bold;"></div>
+    <div id="spinner" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:9999;"><div style="width:48px;height:48px;border:6px solid #667eea;border-top:6px solid #fff;border-radius:50%;animation:spin 1s linear infinite;"></div></div>
+    <footer style="margin-top:40px;text-align:center;color:#999;font-size:13px;padding:20px 0;">
+        AWS Drift Detection App &copy; 2025 | Version 1.0
+    </footer>
+
     <script>
         function toggleAlertDetails(alertId) {
             const details = document.getElementById('details-' + alertId);
@@ -573,31 +587,72 @@
             });
         }
 
+        function showNotification(msg, success=true) {
+            var n = document.getElementById('notification');
+            n.style.background = success ? '#eafbe7' : '#fee';
+            n.style.color = success ? '#27ae60' : '#e74c3c';
+            n.textContent = msg;
+            n.style.display = 'block';
+            setTimeout(function(){n.style.display='none';}, 3500);
+        }
+
+        function showSpinner(show) {
+            document.getElementById('spinner').style.display = show ? 'block' : 'none';
+        }
+
+        function exportAlerts() {
+            showSpinner(true);
+            window.location.href = '/api/alerts/export';
+            setTimeout(function(){showSpinner(false);}, 1500);
+        }
+
+        // Patch AJAX actions to show spinner and notifications
+        function updateAlertStatus(alertId, action) {
+            showSpinner(true);
+            fetch('/api/alerts/update', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ alert_id: alertId, action: action })
+            })
+            .then(res => res.json())
+            .then(data => {
+                showSpinner(false);
+                if (data.success) {
+                    showNotification('Alert ' + alertId + ' updated: ' + action, true);
+                    setTimeout(function(){location.reload();}, 1200);
+                } else {
+                    showNotification('Failed to update alert: ' + data.error, false);
+                }
+            })
+            .catch(function(){showSpinner(false);showNotification('Network error',false);});
+        }
+
         function acknowledgeAlert(alertId) {
-            // In a real app, this would make an API call
-            alert('Alert ' + alertId + ' has been acknowledged.\n\nIn the production version, this would:\n• Update the alert status\n• Send notifications\n• Log the action');
+            updateAlertStatus(alertId, 'acknowledge');
         }
-
         function suppressAlert(alertId) {
-            if (confirm('Are you sure you want to suppress this alert?\n\nThis will prevent future notifications for this specific drift.')) {
-                alert('Alert ' + alertId + ' has been suppressed.\n\nIn the production version, this would:\n• Stop future notifications\n• Add to suppression rules\n• Log the action');
-            }
+            updateAlertStatus(alertId, 'suppress');
         }
-
         function resolveAlert(alertId) {
-            if (confirm('Mark this alert as resolved?\n\nThis indicates the drift has been fixed.')) {
-                alert('Alert ' + alertId + ' marked as resolved.\n\nIn the production version, this would:\n• Update alert status\n• Remove from active alerts\n• Add to resolution history');
-            }
+            updateAlertStatus(alertId, 'resolve');
         }
 
         function viewInAWS(resourceId) {
             alert('Opening AWS Console for resource: ' + resourceId + '\n\nIn the production version, this would:\n• Open AWS Console\n• Navigate to the specific resource\n• Show current configuration');
         }
 
-        // Auto-refresh alerts every 30 seconds
+        // Real-time AJAX refresh for alerts
         setInterval(function() {
-            // In production, this would fetch new alert data
-            console.log('Checking for new alerts...');
+            fetch('/alerts')
+                .then(res => res.text())
+                .then(html => {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+                    const newAlerts = doc.getElementById('alerts-container');
+                    if (newAlerts) {
+                        document.getElementById('alerts-container').innerHTML = newAlerts.innerHTML;
+                    }
+                });
         }, 30000);
     </script>
 </body>

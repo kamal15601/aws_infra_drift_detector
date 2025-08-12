@@ -12,7 +12,7 @@ This application provides:
 - Secure credential management
 """
 
-from flask import Flask, render_template, jsonify, request, flash, redirect, url_for, make_response
+from flask import Flask, render_template, jsonify, request, flash, redirect, url_for, make_response, send_file, Response
 import json
 import os
 from datetime import datetime, timedelta
@@ -24,6 +24,8 @@ from dataclasses import dataclass, asdict
 from typing import List, Dict, Any, Optional
 import uuid
 import pytz
+import glob
+import csv
 
 # Import new modules
 from config_manager import ConfigManager, AppConfig
@@ -60,9 +62,9 @@ def format_timestamp_ist(timestamp_str):
         formatted_date = ist_time.strftime('%Y-%m-%d')
         formatted_time = ist_time.strftime('%I:%M %p')
         
-        return f"{formatted_date} : {formatted_time}"
+        return "{} : {}".format(formatted_date, formatted_time)
     except Exception as e:
-        logger.error(f"Error formatting timestamp {timestamp_str}: {e}")
+        logger.error("Error formatting timestamp {}: {}".format(timestamp_str, str(e)))
         return str(timestamp_str)
 
 # Register template filter
@@ -78,33 +80,61 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # Global configuration
-config_manager = ConfigManager()
-app_config = config_manager.load_config()
-app.secret_key = app_config.secret_key
+try:
+    config_manager = ConfigManager()
+    app_config = config_manager.load_config()
+    app.secret_key = app_config.secret_key
+    logger.info("Configuration loaded successfully")
+except Exception as e:
+    logger.error(f"Failed to load configuration: {e}")
+    # Fallback configuration for Azure deployment
+    class FallbackConfig:
+        secret_key = 'fallback-secret-key-for-azure'
+        data_dir = 'data'
+        debug = False
+        port = 5000
+        host = '0.0.0.0'
+        enable_auto_scan = False
+    
+    app_config = FallbackConfig()
+    app.secret_key = app_config.secret_key
 
 # AWS Integration (will be None if not configured)
 aws_integration = None
 try:
-    aws_config = config_manager.get_aws_config()
-    aws_integration = AWSIntegration(aws_config)
-    connection_test = aws_integration.test_connection()
-    if connection_test['success']:
-        logger.info(f"AWS connection successful: {connection_test['user_arn']}")
+    if hasattr(config_manager, 'get_aws_config'):
+        aws_config = config_manager.get_aws_config()
+        aws_integration = AWSIntegration(aws_config)
+        connection_test = aws_integration.test_connection()
+        if connection_test['success']:
+            logger.info(f"AWS connection successful: {connection_test['user_arn']}")
+        else:
+            logger.warning(f"AWS connection failed: {connection_test['error']}")
+            aws_integration = None
     else:
-        logger.warning(f"AWS connection failed: {connection_test['error']}")
-        aws_integration = None
+        logger.info("AWS configuration not available, running in demo mode")
 except Exception as e:
     logger.warning(f"AWS integration not available: {e}")
     aws_integration = None
 
 # Drift detection engine
-drift_engine = DriftDetectionEngine(asdict(app_config))
+try:
+    drift_engine = DriftDetectionEngine(asdict(app_config))
+    logger.info("Drift detection engine initialized")
+except Exception as e:
+    logger.error(f"Failed to initialize drift engine: {e}")
+    drift_engine = None
 
 # Create data directories
-os.makedirs(app_config.data_dir, exist_ok=True)
-os.makedirs(f'{app_config.data_dir}/scans', exist_ok=True)
-os.makedirs(f'{app_config.data_dir}/alerts', exist_ok=True)
-os.makedirs(f'{app_config.data_dir}/mock', exist_ok=True)
+try:
+    os.makedirs(app_config.data_dir, exist_ok=True)
+    os.makedirs(f'{app_config.data_dir}/scans', exist_ok=True)
+    os.makedirs(f'{app_config.data_dir}/alerts', exist_ok=True)
+    os.makedirs(f'{app_config.data_dir}/mock', exist_ok=True)
+    logger.info("Data directories created successfully")
+except Exception as e:
+    logger.warning(f"Could not create data directories: {e}")
+    # Continue without data directories for Azure deployment
 
 # Global variables
 current_scan_id = None
@@ -600,6 +630,20 @@ def load_active_alerts():
         logger.error(f"Error loading alerts: {e}")
     return []
 
+def load_all_alerts():
+    """Load all alerts from the alerts data directory"""
+    alerts = []
+    alert_files = glob.glob(f'{app_config.data_dir}/alerts/alerts_*.json')
+    for file in sorted(alert_files, reverse=True):
+        try:
+            with open(file, 'r') as f:
+                file_alerts = json.load(f)
+                if isinstance(file_alerts, list):
+                    alerts.extend(file_alerts)
+        except Exception as e:
+            logger.warning(f"Could not load alerts from {file}: {e}")
+    return alerts
+
 # Flask Routes
 @app.route('/')
 def dashboard():
@@ -745,6 +789,32 @@ def api_alerts():
     except Exception as e:
         return jsonify({'error': str(e)})
 
+@app.route('/api/alerts/export')
+def export_alerts():
+    """Export all alerts as CSV"""
+    alerts = load_all_alerts()
+    if not alerts:
+        return Response('No alerts found', mimetype='text/plain')
+    # Create CSV in memory
+    fieldnames = ['alert_id', 'severity', 'status', 'timestamp', 'resource_type', 'resource_name', 'drift_type', 'environment']
+    def get_val(alert, key):
+        if key == 'resource_type':
+            return alert.get('resource', {}).get('type', '')
+        if key == 'resource_name':
+            return alert.get('resource', {}).get('name', '')
+        if key == 'drift_type':
+            return alert.get('drift_details', {}).get('drift_type', '')
+        if key == 'environment':
+            return alert.get('alert_metadata', {}).get('environment', '')
+        return alert.get(key, '')
+    output = []
+    output.append(','.join(fieldnames))
+    for alert in alerts:
+        row = [str(get_val(alert, k)).replace(',', ' ') for k in fieldnames]
+        output.append(','.join(row))
+    csv_data = '\n'.join(output)
+    return Response(csv_data, mimetype='text/csv', headers={"Content-Disposition": "attachment;filename=alerts.csv"})
+
 @app.route('/api/trigger-scan', methods=['POST'])
 def api_trigger_scan():
     """Manually trigger a drift scan"""
@@ -796,7 +866,33 @@ def scan_results():
 @app.route('/alerts')
 def alerts():
     """Alerts page"""
-    return render_template('alerts.html', demo_mode=demo_mode)
+    all_alerts = load_all_alerts()
+    return render_template('alerts.html', alerts=all_alerts, demo_mode=demo_mode)
+
+@app.route('/settings')
+def settings():
+    return render_template('settings.html')
+
+@app.route('/api/settings/aws', methods=['POST'])
+def save_aws_settings():
+    data = request.get_json()
+    key_id = data.get('aws_access_key_id')
+    secret = data.get('aws_secret_access_key')
+    region = data.get('aws_region')
+    if not key_id or not secret or not region:
+        return jsonify({'success': False, 'error': 'Missing required fields'}), 400
+    # Save to config.json
+    try:
+        with open('config.json', 'r') as f:
+            config = json.load(f)
+        config['aws_access_key_id'] = key_id
+        config['aws_secret_access_key'] = secret
+        config['aws_region'] = region
+        with open('config.json', 'w') as f:
+            json.dump(config, f, indent=2)
+        return jsonify({'success': True})
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
 
 @app.route('/api/aws-test')
 def api_aws_test():
@@ -823,6 +919,27 @@ def config_page():
                          app_config=app_config, 
                          demo_mode=demo_mode)
 
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
+# Flask Routes
+
+@app.route('/health')
+def health_check():
+    """Simple health check to verify app is running"""
+    return {
+        'status': 'healthy',
+        'timestamp': datetime.now().isoformat(),
+        'aws_integration': aws_integration is not None,
+        'mode': 'demo' if aws_integration is None else 'production'
+    }
+
+@app.route('/test')
+def test_page():
+    """Simple test page"""
+    return "<h1>AWS Drift Detection App is Running!</h1><p>App is working correctly.</p>"
+
 if __name__ == '__main__':
     # Start auto scanner if enabled
     if app_config.enable_auto_scan:
@@ -831,13 +948,16 @@ if __name__ == '__main__':
         auto_scanner_thread.start()
         logger.info("Auto scanner started")
     
+    # Get port from Azure App Service environment or use config
+    port = int(os.environ.get('PORT', app_config.port))
+    
     # Run Flask app
-    logger.info(f"Starting drift detection app on {app_config.host}:{app_config.port}")
+    logger.info(f"Starting drift detection app on {app_config.host}:{port}")
     logger.info(f"Mode: {'Demo' if demo_mode else 'Production'}")
     logger.info(f"AWS Integration: {'Disabled' if aws_integration is None else 'Enabled'}")
     
     app.run(
         host=app_config.host,
-        port=app_config.port,
+        port=port,
         debug=app_config.debug
     )

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - AWS Credentials</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f7fa; }
+        .container { max-width: 500px; margin: 40px auto; background: white; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); padding: 30px; }
+        h2 { color: #667eea; margin-bottom: 20px; }
+        label { display: block; margin-top: 15px; font-weight: bold; }
+        input[type=text], input[type=password] { width: 100%; padding: 10px; margin-top: 5px; border-radius: 5px; border: 1px solid #ddd; }
+        .btn { background-color: #667eea; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-top: 20px; }
+        .btn:hover { background-color: #5a6fd8; }
+        .message { margin-top: 20px; color: #27ae60; font-weight: bold; }
+        @keyframes spin{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>⚙️ AWS Account Settings</h2>
+        <form id="aws-settings-form">
+            <label for="aws_access_key_id">AWS Access Key ID</label>
+            <input type="text" id="aws_access_key_id" name="aws_access_key_id" required>
+            <label for="aws_secret_access_key">AWS Secret Access Key</label>
+            <input type="password" id="aws_secret_access_key" name="aws_secret_access_key" required>
+            <label for="aws_region">AWS Region</label>
+            <input type="text" id="aws_region" name="aws_region" value="ap-south-1" required>
+            <button type="submit" class="btn">Save Settings</button>
+        </form>
+        <div class="message" id="settings-message"></div>
+    </div>
+    <div class="nav-links" style="text-align:center;margin-bottom:30px;">
+        <a href="/">🏠 Dashboard</a>
+        <a href="/scan-results">🔍 Scan Results</a>
+        <a href="/health">❤️ Health</a>
+        <a href="/settings">⚙️ Settings</a>
+        <a href="/about">ℹ️ About</a>
+    </div>
+    <div id="notification" style="position:fixed;top:20px;right:20px;z-index:9999;min-width:200px;max-width:400px;padding:12px 20px;background:#fff;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,0.15);color:#333;display:none;font-weight:bold;"></div>
+    <div id="spinner" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:9999;"><div style="width:48px;height:48px;border:6px solid #667eea;border-top:6px solid #fff;border-radius:50%;animation:spin 1s linear infinite;"></div></div>
+    <div style="margin-top:30px;color:#e74c3c;font-size:13px;text-align:center;">⚠️ Never share your AWS credentials. They are stored locally and used only for scanning.</div>
+    <footer style="margin-top:40px;text-align:center;color:#999;font-size:13px;padding:20px 0;">
+        AWS Drift Detection App &copy; 2025 | Version 1.0
+    </footer>
+    <script>
+        function showNotification(msg, success=true) {
+            var n = document.getElementById('notification');
+            n.style.background = success ? '#eafbe7' : '#fee';
+            n.style.color = success ? '#27ae60' : '#e74c3c';
+            n.textContent = msg;
+            n.style.display = 'block';
+            setTimeout(function(){n.style.display='none';}, 3500);
+        }
+        function showSpinner(show) {
+            document.getElementById('spinner').style.display = show ? 'block' : 'none';
+        }
+        // Patch form submit to show spinner and notification
+        var form = document.getElementById('aws-settings-form');
+        form.onsubmit = function(e) {
+            e.preventDefault();
+            showSpinner(true);
+            const data = {
+                aws_access_key_id: document.getElementById('aws_access_key_id').value,
+                aws_secret_access_key: document.getElementById('aws_secret_access_key').value,
+                aws_region: document.getElementById('aws_region').value
+            };
+            fetch('/api/settings/aws', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+            .then(res => res.json())
+            .then(data => {
+                showSpinner(false);
+                if (data.success) {
+                    showNotification('✅ AWS credentials saved!', true);
+                } else {
+                    showNotification('❌ Error: ' + data.error, false);
+                }
+            })
+            .catch(function(){showSpinner(false);showNotification('Network error',false);});
+        };
+    </script>
+</body>
+</html>

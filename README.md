@@ -228,3 +228,64 @@ Feel free to contribute improvements:
 ## 📄 License
 
 This project is open source and available under the MIT License.
+
+# AWS Infrastructure Drift Detection WebApp
+
+## Overview
+This web application helps you monitor and detect configuration drift in your AWS infrastructure by comparing live AWS resources with your Terraform state. It provides real-time alerts, scan history, and a user-friendly dashboard for cloud operations and DevOps teams.
+
+## Features
+- Real-time AWS drift detection
+- Dashboard with scan results and alert statistics
+- View all active alerts with filtering and search
+- Export alerts as CSV
+- Acknowledge, suppress, and resolve alerts
+- Settings page to securely configure AWS credentials
+- Health check endpoint
+- Responsive, modern UI with notifications and error handling
+
+## How to Install & Run
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/<your-username>/<your-repo>.git
+   cd staticapp
+   ```
+2. **Install dependencies:**
+   ```bash
+   python -m venv .venv
+   source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+   pip install -r requirements.txt
+   ```
+3. **Run the app:**
+   ```bash
+   python main.py
+   ```
+4. **Access the webapp:**
+   Open your browser and go to `http://localhost:5000`
+
+## How to Configure AWS Credentials
+- Click the **Settings** button in the navigation bar.
+- Enter your AWS Access Key ID, Secret Access Key, and Region.
+- Click **Save Settings**. Credentials are securely stored in `config.json`.
+
+## How to Use
+- **Dashboard:** View drift detection status and scan history.
+- **Alerts:** See all active alerts, filter by severity, search, and take actions.
+- **Export:** Download all alerts as CSV for reporting or analysis.
+- **Settings:** Update AWS credentials anytime.
+- **Health:** Check app status and integration.
+
+## Security Notes
+- AWS credentials are stored locally in `config.json` and used only for scanning.
+- Never share your credentials. Use IAM roles and least privilege for production.
+
+## Troubleshooting
+- If alerts do not show, check your AWS credentials and scan history.
+- For deployment issues, verify Python version and dependencies.
+- For API errors, check network and AWS permissions.
+
+## License
+MIT
+
+## Contact
+For support or feature requests, open an issue on GitHub or contact the maintainer.
