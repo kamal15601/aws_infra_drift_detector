@@ -18,7 +18,7 @@ class AppConfig:
     # Application settings
     debug: bool = False
     secret_key: str = "change-me-in-production"
-    port: int = 5000
+    port: int = 8000
     host: str = "0.0.0.0"
     
     # AWS settings
